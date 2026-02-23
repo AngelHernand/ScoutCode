@@ -41,9 +41,14 @@ public partial class CipherDetailViewModel : ObservableObject
             OnPropertyChanged(nameof(SelectedCipher));
             SupportedCharsInfo = _cipherService.GetSupportedCharacters(SelectedCipher);
             IsOcrSupported = IsOcrCompatibleCipher() && _textRecognitionService.IsAvailable;
-            IsSymbolicCipher = SelectedCipher == CipherType.Gato;
+            IsSymbolicCipher = SelectedCipher == CipherType.Gato || SelectedCipher == CipherType.Semaforo;
             if (IsSymbolicCipher)
-                LoadGatoSymbols();
+            {
+                SymbolicCipherInfoText = SelectedCipher == CipherType.Semaforo
+                    ? "Cifrado Semáforo: cada letra se representa con una posición de banderas."
+                    : "Cifrado Gato (Pigpen): cada letra se representa con un símbolo gráfico único.";
+                LoadSymbolicSymbols();
+            }
         }
     }
 
@@ -110,12 +115,15 @@ public partial class CipherDetailViewModel : ObservableObject
     [ObservableProperty]
     private string _ocrStatusMessage = string.Empty;
 
-    // --- Cifrado Gato (simbólico) ---
+    // --- Cifrado simbólico (Gato / Semáforo) ---
 
     [ObservableProperty]
     private bool _isSymbolicCipher;
 
-    // Grilla completa de los 27 símbolos para que el usuario seleccione
+    [ObservableProperty]
+    private string _symbolicCipherInfoText = string.Empty;
+
+    // Grilla completa de símbolos para que el usuario seleccione
     public ObservableCollection<GatoSymbolViewModel> GatoSymbols { get; } = new();
 
     // Secuencia de símbolos seleccionados por el usuario (modo descifrar)
@@ -226,21 +234,38 @@ public partial class CipherDetailViewModel : ObservableObject
         HasGatoDecryptResult = false;
     }
 
-    // --- Cifrado Gato: carga de símbolos ---
+    // --- Cifrado simbólico: carga de símbolos (Gato / Semáforo) ---
 
-    private void LoadGatoSymbols()
+    private void LoadSymbolicSymbols()
     {
         GatoSymbols.Clear();
 
-        foreach (var letter in ScoutCode.Ciphers.CipherUtils.SpanishAlphabet)
+        if (SelectedCipher == CipherType.Gato)
         {
-            var key = letter == 'Ñ' ? "enie" : letter.ToString().ToLowerInvariant();
-            GatoSymbols.Add(new GatoSymbolViewModel
+            foreach (var letter in ScoutCode.Ciphers.CipherUtils.SpanishAlphabet)
             {
-                Key = key,
-                Letter = letter.ToString(),
-                ImageSource = $"gato_{key}.png"
-            });
+                var key = letter == 'Ñ' ? "enie" : letter.ToString().ToLowerInvariant();
+                GatoSymbols.Add(new GatoSymbolViewModel
+                {
+                    Key = key,
+                    Letter = letter.ToString(),
+                    ImageSource = $"gato_{key}.png"
+                });
+            }
+        }
+        else if (SelectedCipher == CipherType.Semaforo)
+        {
+            // Semáforo: solo A-Z (26 letras, sin Ñ)
+            for (char c = 'A'; c <= 'Z'; c++)
+            {
+                var key = c.ToString().ToLowerInvariant();
+                GatoSymbols.Add(new GatoSymbolViewModel
+                {
+                    Key = key,
+                    Letter = c.ToString(),
+                    ImageSource = $"semaforo_{key}.png"
+                });
+            }
         }
     }
 
@@ -272,10 +297,13 @@ public partial class CipherDetailViewModel : ObservableObject
                 return;
             }
 
-            // Parsear "GATO:h,o,l,a" → lista de imágenes
-            if (result.StartsWith("GATO:", StringComparison.OrdinalIgnoreCase))
+            // Parsear "GATO:h,o,l,a" o "SEMAFORO:h,o,l,a" → lista de imágenes
+            var prefix = SelectedCipher == CipherType.Semaforo ? "SEMAFORO:" : "GATO:";
+            var imagePrefix = SelectedCipher == CipherType.Semaforo ? "semaforo" : "gato";
+
+            if (result.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
             {
-                var payload = result["GATO:".Length..];
+                var payload = result[prefix.Length..];
                 var keys = payload.Split(',');
                 foreach (var k in keys)
                 {
@@ -298,12 +326,13 @@ public partial class CipherDetailViewModel : ObservableObject
                         {
                             Key = trimmed,
                             Letter = letterDisplay,
-                            ImageSource = $"gato_{trimmed}.png"
+                            ImageSource = $"{imagePrefix}_{trimmed}.png"
                         });
                     }
                 }
                 HasGatoEncryptResult = true;
-                StatusMessage = "Texto cifrado en símbolos Gato.";
+                var cipherLabel = SelectedCipher == CipherType.Semaforo ? "Semáforo" : "Gato";
+                StatusMessage = $"Texto cifrado en símbolos {cipherLabel}.";
             }
         }
         catch (Exception ex)
@@ -320,7 +349,7 @@ public partial class CipherDetailViewModel : ObservableObject
     {
         if (symbol == null) return;
 
-        // Agregar a la secuencia seleccionada
+        // Agregar a la secuencia seleccionada (funciona tanto para Gato como Semáforo)
         SelectedGatoSymbols.Add(new GatoSymbolViewModel
         {
             Key = symbol.Key,
@@ -384,9 +413,10 @@ public partial class CipherDetailViewModel : ObservableObject
 
         try
         {
-            // Reconstruir formato "GATO:h,o,l,a"
+            // Reconstruir formato "GATO:h,o,l,a" o "SEMAFORO:h,o,l,a"
             var keys = SelectedGatoSymbols.Select(s => s.Key);
-            var gatoInput = "GATO:" + string.Join(",", keys);
+            var symbolicPrefix = SelectedCipher == CipherType.Semaforo ? "SEMAFORO:" : "GATO:";
+            var gatoInput = symbolicPrefix + string.Join(",", keys);
 
             var result = _cipherService.Process(SelectedCipher, OperationMode.Decrypt, gatoInput);
             GatoDecryptedText = result;
@@ -404,8 +434,8 @@ public partial class CipherDetailViewModel : ObservableObject
 
     private bool IsOcrCompatibleCipher()
     {
-        // Gato usa símbolos gráficos → OCR de texto no sirve.
-        return SelectedCipher != CipherType.Gato;
+        // Gato y Semáforo usan símbolos gráficos → OCR de texto no sirve.
+        return SelectedCipher != CipherType.Gato && SelectedCipher != CipherType.Semaforo;
     }
 
     // --- Comandos de camara ---

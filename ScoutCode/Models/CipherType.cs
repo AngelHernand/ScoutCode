@@ -13,5 +13,6 @@ public enum CipherType
     Parelinofo,
     Dametupico,
     Agujerito,
-    Gato
+    Gato,
+    Semaforo
 }

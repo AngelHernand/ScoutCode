@@ -37,6 +37,7 @@
     <Compile Include="..\ScoutCode\Ciphers\DametupicoCipherAlgorithm.cs" Link="Ciphers\DametupicoCipherAlgorithm.cs" />
     <Compile Include="..\ScoutCode\Ciphers\AgujeritoCipherAlgorithm.cs" Link="Ciphers\AgujeritoCipherAlgorithm.cs" />
     <Compile Include="..\ScoutCode\Ciphers\GatoCipherAlgorithm.cs" Link="Ciphers\GatoCipherAlgorithm.cs" />
+    <Compile Include="..\ScoutCode\Ciphers\SemaforoCipherAlgorithm.cs" Link="Ciphers\SemaforoCipherAlgorithm.cs" />
     <Compile Include="..\ScoutCode\Services\ICipherService.cs" Link="Services\ICipherService.cs" />
     <Compile Include="..\ScoutCode\Services\CipherService.cs" Link="Services\CipherService.cs" />
   </ItemGroup>

@@ -206,7 +206,7 @@
                                    TextColor="{StaticResource MountainAmber}">
                                 <Label.FormattedText>
                                     <FormattedString>
-                                        <Span Text="ℹ  " FontSize="13" />
+                                    <Span Text="(i)  " FontSize="13" />
                                         <Span Text="Caracteres soportados: " FontFamily="InterSemiBold" />
                                         <Span Text="{Binding SupportedCharsInfo}" />
                                     </FormattedString>
@@ -244,7 +244,7 @@
                         <!-- Process button + Clear -->
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
                             <Button x:Name="ProcessBtn"
-                                    Text="{Binding OperationLabel, StringFormat=' Procesar: {0}'}"
+                                    Text="{Binding OperationLabel, StringFormat='Procesar: {0}'}"
                                     Command="{Binding ProcessCommand}"
                                     Grid.Column="0"
                                     BackgroundColor="{StaticResource MountainGreen}"
@@ -253,7 +253,7 @@
                                     FontSize="14"
                                     CornerRadius="12"
                                     HeightRequest="48" />
-                            <Button Text=""
+                            <Button Text="X"
                                     Command="{Binding ClearAllCommand}"
                                     Grid.Column="1"
                                     BackgroundColor="{StaticResource SecondaryBg}"
@@ -347,15 +347,8 @@
                                 Padding="14">
                             <Label FontSize="11"
                                    FontFamily="InterMedium"
-                                   TextColor="{StaticResource MountainAmber}">
-                                <Label.FormattedText>
-                                    <FormattedString>
-                                        <Span Text="ℹ  " FontSize="13" />
-                                        <Span Text="Cifrado Gato (Pigpen): " FontFamily="InterSemiBold" />
-                                        <Span Text="cada letra se representa con un símbolo gráfico único." />
-                                    </FormattedString>
-                                </Label.FormattedText>
-                            </Label>
+                                   TextColor="{StaticResource MountainAmber}"
+                                   Text="{Binding SymbolicCipherInfoText, StringFormat='(i) {0}'}" />
                         </Border>
 
                         <!-- ===== MODO CIFRAR (texto  símbolos) ===== -->
@@ -386,7 +379,7 @@
                             </Border>
 
                             <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
-                                <Button Text=" Cifrar en símbolos"
+                                <Button Text="Cifrar en simbolos"
                                         Command="{Binding ProcessGatoEncryptCommand}"
                                         Grid.Column="0"
                                         BackgroundColor="{StaticResource MountainGreen}"
@@ -395,7 +388,7 @@
                                         FontSize="14"
                                         CornerRadius="12"
                                         HeightRequest="48" />
-                                <Button Text=""
+                                <Button Text="X"
                                         Command="{Binding ClearAllCommand}"
                                         Grid.Column="1"
                                         BackgroundColor="{StaticResource SecondaryBg}"
@@ -573,7 +566,7 @@
                             </Grid>
 
                             <!-- Decrypt button -->
-                            <Button Text=" Descifrar símbolos"
+                            <Button Text="Descifrar simbolos"
                                     Command="{Binding ProcessGatoDecryptCommand}"
                                     BackgroundColor="{StaticResource MountainBlue}"
                                     TextColor="White"

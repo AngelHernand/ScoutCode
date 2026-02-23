@@ -1,4 +1,4 @@
-using ScoutCode.Ciphers;
+﻿using ScoutCode.Ciphers;
 using ScoutCode.Models;
 
 namespace ScoutCode.Services;
@@ -25,6 +25,7 @@ public class CipherService : ICipherService
             { CipherType.Dametupico, new DametupicoCipherAlgorithm() },
             { CipherType.Agujerito, new AgujeritoCipherAlgorithm() },
             { CipherType.Gato, new GatoCipherAlgorithm() },
+            { CipherType.Semaforo, new SemaforoCipherAlgorithm() },
         };
     }
 
@@ -149,7 +150,15 @@ public class CipherService : ICipherService
                 Name = "Gato (Pigpen)",
                 Description = "Cada letra → símbolo gráfico (cuadrículas y aspas).",
                 Type = CipherType.Gato,
-                Icon = "🐱",
+                Icon = "GA",
+                IsAvailable = true
+            },
+            new()
+            {
+                Name = "Semáforo",
+                Description = "Cada letra → posición de banderas de semáforo.",
+                Type = CipherType.Semaforo,
+                Icon = "SE",
                 IsAvailable = true
             },
         };

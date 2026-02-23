@@ -159,9 +159,9 @@ public partial class CipherDetailPage : ContentPage
 
         // Visual feedback
         CopyLabel.Text = "¡Copiado!";
-        CopyIcon.Text = "✅";
+        CopyIcon.Text = "OK";
         await Task.Delay(1500);
         CopyLabel.Text = "Copiar";
-        CopyIcon.Text = "📋";
+        CopyIcon.Text = "";
     }
 }

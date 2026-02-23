@@ -1,4 +1,4 @@
-using ScoutCode.Ciphers;
+﻿using ScoutCode.Ciphers;
 using ScoutCode.Models;
 using ScoutCode.Services;
 using Xunit;
@@ -414,11 +414,11 @@ public class CipherAlgorithmTests
     }
 
     [Fact]
-    public void CipherService_GetAvailableCiphers_Returns12()
+    public void CipherService_GetAvailableCiphers_Returns13()
     {
         var service = new CipherService();
         var ciphers = service.GetAvailableCiphers();
-        Assert.Equal(12, ciphers.Count);
+        Assert.Equal(13, ciphers.Count);
     }
 
     // ==================== REGLA GLOBAL: longitud y roundtrip para sustituciones char-a-char ====================
@@ -447,5 +447,69 @@ public class CipherAlgorithmTests
             var decrypted = service.Process(type, OperationMode.Decrypt, encrypted);
             Assert.Equal(input, decrypted);
         }
+    }
+
+    // ==================== SEMÁFORO ====================
+
+    [Fact]
+    public void Semaforo_Encrypt_HOLA()
+    {
+        var algo = new SemaforoCipherAlgorithm();
+        Assert.Equal("SEMAFORO:h,o,l,a", algo.Encrypt("HOLA"));
+    }
+
+    [Fact]
+    public void Semaforo_Encrypt_WithSpaces()
+    {
+        var algo = new SemaforoCipherAlgorithm();
+        // Espacios se representan con " "
+        Assert.Equal("SEMAFORO:h,i, ,a", algo.Encrypt("HI A"));
+    }
+
+    [Fact]
+    public void Semaforo_Encrypt_IgnoresÑ()
+    {
+        var algo = new SemaforoCipherAlgorithm();
+        // Ñ no está soportada, se ignora
+        Assert.Equal("SEMAFORO:a,b", algo.Encrypt("AÑB"));
+    }
+
+    [Fact]
+    public void Semaforo_Encrypt_EmptyInput()
+    {
+        var algo = new SemaforoCipherAlgorithm();
+        Assert.Equal(string.Empty, algo.Encrypt(""));
+    }
+
+    [Fact]
+    public void Semaforo_Decrypt_Basic()
+    {
+        var algo = new SemaforoCipherAlgorithm();
+        Assert.Equal("HOLA", algo.Decrypt("SEMAFORO:h,o,l,a"));
+    }
+
+    [Fact]
+    public void Semaforo_Decrypt_WithSpaces()
+    {
+        var algo = new SemaforoCipherAlgorithm();
+        Assert.Equal("HI A", algo.Decrypt("SEMAFORO:h,i, ,a"));
+    }
+
+    [Fact]
+    public void Semaforo_Decrypt_InvalidPrefix()
+    {
+        var algo = new SemaforoCipherAlgorithm();
+        var result = algo.Decrypt("GATO:h,o,l,a");
+        Assert.StartsWith("Error", result);
+    }
+
+    [Fact]
+    public void Semaforo_Roundtrip()
+    {
+        var algo = new SemaforoCipherAlgorithm();
+        var original = "HELLO WORLD";
+        var encrypted = algo.Encrypt(original);
+        var decrypted = algo.Decrypt(encrypted);
+        Assert.Equal(original, decrypted);
     }
 }
