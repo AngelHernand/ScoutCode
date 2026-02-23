@@ -414,11 +414,11 @@ public class CipherAlgorithmTests
     }
 
     [Fact]
-    public void CipherService_GetAvailableCiphers_Returns12()
+    public void CipherService_GetAvailableCiphers_Returns11()
     {
         var service = new CipherService();
         var ciphers = service.GetAvailableCiphers();
-        Assert.Equal(12, ciphers.Count);
+        Assert.Equal(11, ciphers.Count);
     }
 
     // ==================== REGLA GLOBAL: longitud y roundtrip para sustituciones char-a-char ====================

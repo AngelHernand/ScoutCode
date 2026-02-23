@@ -1,0 +1,617 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ScoutCode.ViewModels"
+             xmlns:models="clr-namespace:ScoutCode.Models"
+             x:Class="ScoutCode.Views.CipherDetailPage"
+             x:DataType="vm:CipherDetailViewModel"
+             Title="{Binding CipherName}"
+             BackgroundColor="{StaticResource ScoutBg}">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- Tab Selector -->
+        <Grid Grid.Row="0"
+              ColumnDefinitions="*,*"
+              Padding="20,14,20,6"
+              ColumnSpacing="10">
+            <Button Text="Manual"
+                    Grid.Column="0"
+                    Clicked="OnManualTabClicked"
+                    x:Name="ManualTabBtn"
+                    BackgroundColor="{StaticResource AccentIndigo}"
+                    TextColor="White"
+                    CornerRadius="22"
+                    FontFamily="OpenSansSemibold"
+                    FontAttributes="Bold"
+                    HeightRequest="44" />
+            <Button Text="Cámara"
+                    Grid.Column="1"
+                    Clicked="OnCameraTabClicked"
+                    x:Name="CameraTabBtn"
+                    BackgroundColor="{StaticResource SurfaceLight}"
+                    TextColor="{StaticResource Gray500}"
+                    CornerRadius="22"
+                    FontFamily="OpenSansSemibold"
+                    HeightRequest="44" />
+        </Grid>
+
+        <!-- Contenido con tabs -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="16" Spacing="12">
+
+                <!-- ============================== -->
+                <!-- SECCIÓN MANUAL -->
+                <!-- ============================== -->
+                <VerticalStackLayout IsVisible="{Binding IsManualMode}" Spacing="14">
+
+                    <!-- ======================================== -->
+                    <!-- UI NORMAL (cifrados de texto)            -->
+                    <!-- ======================================== -->
+                    <VerticalStackLayout IsVisible="{Binding IsSymbolicCipher, Converter={StaticResource InvertedBoolConverter}}" Spacing="14">
+
+                        <!-- Info de caracteres soportados -->
+                        <Border BackgroundColor="{StaticResource Secondary}"
+                                Stroke="Transparent"
+                                StrokeShape="RoundRectangle 10"
+                                Padding="14">
+                            <Label FontSize="13"
+                                   TextColor="{StaticResource Gray500}">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="Caracteres soportados: " FontAttributes="Bold" />
+                                        <Span Text="{Binding SupportedCharsInfo}" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </Border>
+
+                        <!-- Selector de operación -->
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                            <Button x:Name="EncryptBtn"
+                                    Text="Cifrar"
+                                    Grid.Column="0"
+                                    Clicked="OnEncryptSelected"
+                                    BackgroundColor="{StaticResource AccentIndigo}"
+                                    TextColor="White"
+                                    CornerRadius="12"
+                                    FontFamily="OpenSansSemibold"
+                                    FontAttributes="Bold" />
+                            <Button x:Name="DecryptBtn"
+                                    Text="Descifrar"
+                                    Grid.Column="1"
+                                    Clicked="OnDecryptSelected"
+                                    BackgroundColor="{StaticResource SurfaceLight}"
+                                    TextColor="{StaticResource Gray500}"
+                                    CornerRadius="12"
+                                    FontFamily="OpenSansSemibold" />
+                        </Grid>
+
+                        <!-- Entrada de texto -->
+                        <Label Text="ENTRADA"
+                               FontSize="12"
+                               FontFamily="OpenSansSemibold"
+                               TextTransform="Uppercase"
+                               CharacterSpacing="1"
+                               TextColor="{StaticResource Gray400}"
+                               Margin="2,4,0,0" />
+
+                        <Border Stroke="{StaticResource SurfaceMuted}"
+                                StrokeShape="RoundRectangle 12"
+                                StrokeThickness="1"
+                                Padding="8"
+                                MinimumHeightRequest="120"
+                                BackgroundColor="White">
+                            <Editor Text="{Binding InputText}"
+                                    Placeholder="Escribe aquí el texto..."
+                                    AutoSize="TextChanges"
+                                    MinimumHeightRequest="110"
+                                    FontSize="16"
+                                    FontFamily="OpenSansRegular" />
+                        </Border>
+
+                        <!-- Botones de acción -->
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                            <Button Text="{Binding OperationLabel, StringFormat='Procesar: {0}'}"
+                                    Command="{Binding ProcessCommand}"
+                                    Grid.Column="0"
+                                    BackgroundColor="{StaticResource AccentTeal}"
+                                    TextColor="White"
+                                    FontFamily="OpenSansSemibold"
+                                    FontAttributes="Bold"
+                                    CornerRadius="12"
+                                    HeightRequest="48" />
+                            <Button Text="✕"
+                                    Command="{Binding ClearAllCommand}"
+                                    Grid.Column="1"
+                                    BackgroundColor="{StaticResource SurfaceLight}"
+                                    TextColor="{StaticResource Gray500}"
+                                    FontFamily="OpenSansSemibold"
+                                    CornerRadius="12"
+                                    WidthRequest="50"
+                                    HeightRequest="48" />
+                        </Grid>
+
+                        <!-- Mensaje de estado -->
+                        <Label Text="{Binding StatusMessage}"
+                               IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}"
+                               FontSize="13"
+                               FontFamily="OpenSansRegular"
+                               TextColor="{StaticResource Gray400}"
+                               HorizontalTextAlignment="Center"
+                               Margin="0,4" />
+
+                        <!-- Resultado -->
+                        <VerticalStackLayout IsVisible="{Binding HasOutput}" Spacing="10">
+                            <Label Text="RESULTADO"
+                                   FontSize="12"
+                                   FontFamily="OpenSansSemibold"
+                                   TextTransform="Uppercase"
+                                   CharacterSpacing="1"
+                                   TextColor="{StaticResource Gray400}"
+                                   Margin="2,4,0,0" />
+
+                            <Border Stroke="{StaticResource SuccessBorder}"
+                                    StrokeShape="RoundRectangle 12"
+                                    StrokeThickness="1"
+                                    Padding="14"
+                                    MinimumHeightRequest="80"
+                                    BackgroundColor="{StaticResource SuccessBg}">
+                                <Label Text="{Binding OutputText}"
+                                       FontSize="16"
+                                       FontFamily="OpenSansRegular"
+                                       TextColor="{StaticResource SuccessText}" />
+                            </Border>
+
+                            <Button Text="Copiar resultado"
+                                    Command="{Binding CopyResultCommand}"
+                                    BackgroundColor="{StaticResource AccentIndigo}"
+                                    TextColor="White"
+                                    FontFamily="OpenSansSemibold"
+                                    CornerRadius="12"
+                                    HeightRequest="44" />
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+
+                    <!-- ======================================== -->
+                    <!-- UI GATO (cifrado simbólico)              -->
+                    <!-- ======================================== -->
+                    <VerticalStackLayout IsVisible="{Binding IsSymbolicCipher}" Spacing="14">
+
+                        <!-- Info -->
+                        <Border BackgroundColor="{StaticResource Secondary}"
+                                Stroke="Transparent"
+                                StrokeShape="RoundRectangle 10"
+                                Padding="14">
+                            <Label FontSize="13"
+                                   TextColor="{StaticResource Gray500}">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="Cifrado Gato (Pigpen): " FontAttributes="Bold" />
+                                        <Span Text="cada letra se representa con un símbolo gráfico único." />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </Border>
+
+                        <!-- Selector Cifrar / Descifrar -->
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                            <Button x:Name="GatoEncryptBtn"
+                                    Text="Cifrar"
+                                    Grid.Column="0"
+                                    Clicked="OnGatoEncryptSelected"
+                                    BackgroundColor="{StaticResource AccentIndigo}"
+                                    TextColor="White"
+                                    CornerRadius="12"
+                                    FontFamily="OpenSansSemibold"
+                                    FontAttributes="Bold" />
+                            <Button x:Name="GatoDecryptBtn"
+                                    Text="Descifrar"
+                                    Grid.Column="1"
+                                    Clicked="OnGatoDecryptSelected"
+                                    BackgroundColor="{StaticResource SurfaceLight}"
+                                    TextColor="{StaticResource Gray500}"
+                                    CornerRadius="12"
+                                    FontFamily="OpenSansSemibold" />
+                        </Grid>
+
+                        <!-- ===== MODO CIFRAR (texto → símbolos) ===== -->
+                        <VerticalStackLayout x:Name="GatoEncryptSection" IsVisible="True" Spacing="12">
+
+                            <Label Text="TEXTO A CIFRAR"
+                                   FontSize="12"
+                                   FontFamily="OpenSansSemibold"
+                                   TextTransform="Uppercase"
+                                   CharacterSpacing="1"
+                                   TextColor="{StaticResource Gray400}"
+                                   Margin="2,4,0,0" />
+
+                            <Border Stroke="{StaticResource SurfaceMuted}"
+                                    StrokeShape="RoundRectangle 12"
+                                    StrokeThickness="1"
+                                    Padding="8"
+                                    MinimumHeightRequest="80"
+                                    BackgroundColor="White">
+                                <Editor Text="{Binding InputText}"
+                                        Placeholder="Escribe el texto plano..."
+                                        AutoSize="TextChanges"
+                                        MinimumHeightRequest="70"
+                                        FontSize="16"
+                                        FontFamily="OpenSansRegular" />
+                            </Border>
+
+                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                                <Button Text="Cifrar en símbolos"
+                                        Command="{Binding ProcessGatoEncryptCommand}"
+                                        Grid.Column="0"
+                                        BackgroundColor="{StaticResource AccentTeal}"
+                                        TextColor="White"
+                                        FontFamily="OpenSansSemibold"
+                                        FontAttributes="Bold"
+                                        CornerRadius="12"
+                                        HeightRequest="48" />
+                                <Button Text="✕"
+                                        Command="{Binding ClearAllCommand}"
+                                        Grid.Column="1"
+                                        BackgroundColor="{StaticResource SurfaceLight}"
+                                        TextColor="{StaticResource Gray500}"
+                                        FontFamily="OpenSansSemibold"
+                                        CornerRadius="12"
+                                        WidthRequest="50"
+                                        HeightRequest="48" />
+                            </Grid>
+
+                            <!-- Resultado cifrado: grilla de imágenes -->
+                            <VerticalStackLayout IsVisible="{Binding HasGatoEncryptResult}" Spacing="10">
+                                <Label Text="RESULTADO (SÍMBOLOS)"
+                                       FontSize="12"
+                                       FontFamily="OpenSansSemibold"
+                                       TextTransform="Uppercase"
+                                       CharacterSpacing="1"
+                                       TextColor="{StaticResource Gray400}"
+                                       Margin="2,4,0,0" />
+
+                                <Border Stroke="{StaticResource SuccessBorder}"
+                                        StrokeShape="RoundRectangle 12"
+                                        StrokeThickness="1"
+                                        Padding="10"
+                                        MinimumHeightRequest="80"
+                                        BackgroundColor="{StaticResource SuccessBg}">
+                                    <FlexLayout BindableLayout.ItemsSource="{Binding GatoEncryptedSymbols}"
+                                                Wrap="Wrap"
+                                                JustifyContent="Start"
+                                                AlignItems="Center">
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate x:DataType="models:GatoSymbolViewModel">
+                                                <Border Margin="3"
+                                                        StrokeShape="RoundRectangle 6"
+                                                        Stroke="Transparent"
+                                                        BackgroundColor="Transparent"
+                                                        WidthRequest="52"
+                                                        HeightRequest="52">
+                                                    <Image Source="{Binding ImageSource}"
+                                                           WidthRequest="44"
+                                                           HeightRequest="44"
+                                                           Aspect="AspectFit" />
+                                                </Border>
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+                                    </FlexLayout>
+                                </Border>
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+
+                        <!-- ===== MODO DESCIFRAR (símbolos → texto) ===== -->
+                        <VerticalStackLayout x:Name="GatoDecryptSection" IsVisible="False" Spacing="12">
+
+                            <Label Text="SELECCIONA LOS SÍMBOLOS"
+                                   FontSize="12"
+                                   FontFamily="OpenSansSemibold"
+                                   TextTransform="Uppercase"
+                                   CharacterSpacing="1"
+                                   TextColor="{StaticResource Gray400}"
+                                   Margin="2,4,0,0" />
+
+                            <!-- Grilla de símbolos disponibles -->
+                            <Border Stroke="{StaticResource SurfaceMuted}"
+                                    StrokeShape="RoundRectangle 12"
+                                    StrokeThickness="1"
+                                    Padding="8"
+                                    BackgroundColor="White">
+                                <FlexLayout BindableLayout.ItemsSource="{Binding GatoSymbols}"
+                                            Wrap="Wrap"
+                                            JustifyContent="Center"
+                                            AlignItems="Center">
+                                    <BindableLayout.ItemTemplate>
+                                        <DataTemplate x:DataType="models:GatoSymbolViewModel">
+                                            <Border Margin="3"
+                                                    Padding="4"
+                                                    StrokeShape="RoundRectangle 8"
+                                                    Stroke="{StaticResource SurfaceMuted}"
+                                                    StrokeThickness="1"
+                                                    BackgroundColor="White"
+                                                    WidthRequest="58"
+                                                    HeightRequest="68">
+                                                <Grid RowDefinitions="Auto,Auto"
+                                                      RowSpacing="2"
+                                                      HorizontalOptions="Center">
+                                                    <Image Source="{Binding ImageSource}"
+                                                           Grid.Row="0"
+                                                           WidthRequest="40"
+                                                           HeightRequest="40"
+                                                           Aspect="AspectFit" />
+                                                    <Label Text="{Binding Letter}"
+                                                           Grid.Row="1"
+                                                           FontSize="10"
+                                                           FontFamily="OpenSansSemibold"
+                                                           TextColor="{StaticResource Gray500}"
+                                                           HorizontalTextAlignment="Center" />
+                                                </Grid>
+                                                <Border.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CipherDetailViewModel}}, Path=SelectGatoSymbolCommand}"
+                                                                          CommandParameter="{Binding}" />
+                                                </Border.GestureRecognizers>
+                                            </Border>
+                                        </DataTemplate>
+                                    </BindableLayout.ItemTemplate>
+                                </FlexLayout>
+                            </Border>
+
+                            <!-- Tira de símbolos seleccionados -->
+                            <Label Text="SECUENCIA SELECCIONADA"
+                                   FontSize="12"
+                                   FontFamily="OpenSansSemibold"
+                                   TextTransform="Uppercase"
+                                   CharacterSpacing="1"
+                                   TextColor="{StaticResource Gray400}"
+                                   Margin="2,8,0,0" />
+
+                            <Border Stroke="{StaticResource SurfaceMuted}"
+                                    StrokeShape="RoundRectangle 12"
+                                    StrokeThickness="1"
+                                    Padding="8"
+                                    MinimumHeightRequest="60"
+                                    BackgroundColor="{StaticResource SurfaceLight}">
+                                <FlexLayout BindableLayout.ItemsSource="{Binding SelectedGatoSymbols}"
+                                            Wrap="Wrap"
+                                            JustifyContent="Start"
+                                            AlignItems="Center"
+                                            MinimumHeightRequest="44">
+                                    <BindableLayout.ItemTemplate>
+                                        <DataTemplate x:DataType="models:GatoSymbolViewModel">
+                                            <Border Margin="2"
+                                                    StrokeShape="RoundRectangle 6"
+                                                    Stroke="Transparent"
+                                                    BackgroundColor="Transparent"
+                                                    WidthRequest="40"
+                                                    HeightRequest="40">
+                                                <Image Source="{Binding ImageSource}"
+                                                       WidthRequest="34"
+                                                       HeightRequest="34"
+                                                       Aspect="AspectFit"
+                                                       IsVisible="{Binding ImageSource, Converter={StaticResource StringNotEmptyConverter}}" />
+                                            </Border>
+                                        </DataTemplate>
+                                    </BindableLayout.ItemTemplate>
+                                </FlexLayout>
+                            </Border>
+
+                            <!-- Botones: Espacio, Borrar último, Limpiar -->
+                            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+                                <Button Text="Espacio"
+                                        Grid.Column="0"
+                                        Command="{Binding AddGatoSpaceCommand}"
+                                        BackgroundColor="{StaticResource SurfaceLight}"
+                                        TextColor="{StaticResource Gray500}"
+                                        FontFamily="OpenSansSemibold"
+                                        FontSize="13"
+                                        CornerRadius="10"
+                                        HeightRequest="40" />
+                                <Button Text="← Borrar"
+                                        Grid.Column="1"
+                                        Command="{Binding RemoveLastGatoSymbolCommand}"
+                                        BackgroundColor="{StaticResource SurfaceLight}"
+                                        TextColor="{StaticResource Gray500}"
+                                        FontFamily="OpenSansSemibold"
+                                        FontSize="13"
+                                        CornerRadius="10"
+                                        HeightRequest="40" />
+                                <Button Text="Limpiar"
+                                        Grid.Column="2"
+                                        Command="{Binding ClearGatoSymbolsCommand}"
+                                        BackgroundColor="{StaticResource SurfaceLight}"
+                                        TextColor="{StaticResource Gray500}"
+                                        FontFamily="OpenSansSemibold"
+                                        FontSize="13"
+                                        CornerRadius="10"
+                                        HeightRequest="40" />
+                            </Grid>
+
+                            <!-- Botón descifrar -->
+                            <Button Text="Descifrar símbolos"
+                                    Command="{Binding ProcessGatoDecryptCommand}"
+                                    BackgroundColor="{StaticResource AccentTeal}"
+                                    TextColor="White"
+                                    FontFamily="OpenSansSemibold"
+                                    FontAttributes="Bold"
+                                    CornerRadius="12"
+                                    HeightRequest="48" />
+
+                            <!-- Resultado descifrado -->
+                            <VerticalStackLayout IsVisible="{Binding HasGatoDecryptResult}" Spacing="10">
+                                <Label Text="TEXTO DESCIFRADO"
+                                       FontSize="12"
+                                       FontFamily="OpenSansSemibold"
+                                       TextTransform="Uppercase"
+                                       CharacterSpacing="1"
+                                       TextColor="{StaticResource Gray400}"
+                                       Margin="2,4,0,0" />
+
+                                <Border Stroke="{StaticResource SuccessBorder}"
+                                        StrokeShape="RoundRectangle 12"
+                                        StrokeThickness="1"
+                                        Padding="14"
+                                        MinimumHeightRequest="60"
+                                        BackgroundColor="{StaticResource SuccessBg}">
+                                    <Label Text="{Binding GatoDecryptedText}"
+                                           FontSize="18"
+                                           FontFamily="OpenSansSemibold"
+                                           TextColor="{StaticResource SuccessText}" />
+                                </Border>
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+
+                        <!-- Mensaje de estado Gato -->
+                        <Label Text="{Binding StatusMessage}"
+                               IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}"
+                               FontSize="13"
+                               FontFamily="OpenSansRegular"
+                               TextColor="{StaticResource Gray400}"
+                               HorizontalTextAlignment="Center"
+                               Margin="0,4" />
+
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+
+                <!-- ============================== -->
+                <!-- SECCIÓN CÁMARA (OCR)          -->
+                <!-- ============================== -->
+                <VerticalStackLayout IsVisible="{Binding IsCameraMode}" Spacing="14">
+
+                    <!-- Banner: cifrado NO compatible con OCR (ej. Pigpen a futuro) -->
+                    <Border IsVisible="{Binding IsOcrSupported, Converter={StaticResource InvertedBoolConverter}}"
+                            BackgroundColor="{StaticResource WarningBg}"
+                            Stroke="{StaticResource WarningBorder}"
+                            StrokeShape="RoundRectangle 12"
+                            StrokeThickness="1"
+                            Padding="14">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Reconocimiento de símbolos"
+                                   FontSize="14"
+                                   FontFamily="OpenSansSemibold"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource WarningText}" />
+                            <Label Text="Este cifrado requiere reconocimiento de símbolos gráficos (próximamente)."
+                                   FontSize="13"
+                                   FontFamily="OpenSansRegular"
+                                   TextColor="{StaticResource Gray500}" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Controles de OCR (solo si soportado) -->
+                    <VerticalStackLayout IsVisible="{Binding IsOcrSupported}" Spacing="12">
+
+                        <!-- Preview con imagen capturada -->
+                        <Border IsVisible="{Binding HasPreviewImage}"
+                                BackgroundColor="{StaticResource SurfaceLight}"
+                                Stroke="{StaticResource SurfaceMuted}"
+                                StrokeShape="RoundRectangle 14"
+                                StrokeThickness="1"
+                                HeightRequest="200">
+                            <Image Source="{Binding PreviewImageSource}"
+                                   Aspect="AspectFit" />
+                        </Border>
+
+                        <!-- Placeholder si no hay imagen -->
+                        <Border IsVisible="{Binding HasPreviewImage, Converter={StaticResource InvertedBoolConverter}}"
+                                BackgroundColor="{StaticResource SurfaceLight}"
+                                Stroke="{StaticResource SurfaceMuted}"
+                                StrokeShape="RoundRectangle 14"
+                                StrokeThickness="1.5"
+                                StrokeDashArray="8,4"
+                                HeightRequest="200">
+                            <VerticalStackLayout VerticalOptions="Center"
+                                                 HorizontalOptions="Center"
+                                                 Spacing="8">
+                                <Label Text="📷"
+                                       FontSize="40"
+                                       HorizontalTextAlignment="Center" />
+                                <Label Text="Toma o selecciona una foto del texto cifrado"
+                                       FontSize="13"
+                                       FontFamily="OpenSansRegular"
+                                       TextColor="{StaticResource Gray400}"
+                                       HorizontalTextAlignment="Center" />
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <!-- Botones de captura -->
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                            <Button Text="Tomar foto"
+                                    Grid.Column="0"
+                                    Command="{Binding TakePhotoCommand}"
+                                    IsEnabled="{Binding IsProcessing, Converter={StaticResource InvertedBoolConverter}}"
+                                    BackgroundColor="{StaticResource AccentIndigo}"
+                                    TextColor="White"
+                                    FontFamily="OpenSansSemibold"
+                                    CornerRadius="12"
+                                    HeightRequest="48" />
+                            <Button Text="Elegir foto"
+                                    Grid.Column="1"
+                                    Command="{Binding PickPhotoCommand}"
+                                    IsEnabled="{Binding IsProcessing, Converter={StaticResource InvertedBoolConverter}}"
+                                    BackgroundColor="{StaticResource Secondary}"
+                                    TextColor="{StaticResource AccentIndigo}"
+                                    FontFamily="OpenSansSemibold"
+                                    CornerRadius="12"
+                                    HeightRequest="48" />
+                        </Grid>
+
+                        <!-- Mensaje de estado OCR -->
+                        <Label Text="{Binding OcrStatusMessage}"
+                               IsVisible="{Binding OcrStatusMessage, Converter={StaticResource StringNotEmptyConverter}}"
+                               FontSize="13"
+                               FontFamily="OpenSansRegular"
+                               TextColor="{StaticResource Gray500}"
+                               HorizontalTextAlignment="Center"
+                               Margin="0,4" />
+
+                        <!-- ActivityIndicator -->
+                        <ActivityIndicator IsRunning="{Binding IsProcessing}"
+                                           IsVisible="{Binding IsProcessing}"
+                                           Color="{StaticResource AccentTeal}"
+                                           HorizontalOptions="Center" />
+
+                        <!-- Texto reconocido (editable) -->
+                        <VerticalStackLayout IsVisible="{Binding HasCameraResult}" Spacing="10">
+
+                            <Label Text="TEXTO RECONOCIDO (editable)"
+                                   FontSize="12"
+                                   FontFamily="OpenSansSemibold"
+                                   TextTransform="Uppercase"
+                                   CharacterSpacing="1"
+                                   TextColor="{StaticResource Gray400}"
+                                   Margin="2,4,0,0" />
+
+                            <Border Stroke="{StaticResource SurfaceMuted}"
+                                    StrokeShape="RoundRectangle 12"
+                                    StrokeThickness="1"
+                                    Padding="8"
+                                    MinimumHeightRequest="100"
+                                    BackgroundColor="White">
+                                <Editor Text="{Binding CameraResultText}"
+                                        Placeholder="El texto reconocido aparecerá aquí..."
+                                        AutoSize="TextChanges"
+                                        MinimumHeightRequest="90"
+                                        FontSize="16"
+                                        FontFamily="OpenSansRegular" />
+                            </Border>
+
+                            <!-- Botón descifrar -->
+                            <Button Text="Descifrar"
+                                    Command="{Binding ProcessCameraCommand}"
+                                    IsEnabled="{Binding IsProcessing, Converter={StaticResource InvertedBoolConverter}}"
+                                    BackgroundColor="{StaticResource AccentTeal}"
+                                    TextColor="White"
+                                    FontFamily="OpenSansSemibold"
+                                    FontAttributes="Bold"
+                                    CornerRadius="12"
+                                    HeightRequest="48" />
+                        </VerticalStackLayout>
+
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>
