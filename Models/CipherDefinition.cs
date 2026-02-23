@@ -1,8 +1,5 @@
 namespace ScoutCode.Models;
 
-/// <summary>
-/// Define una clave de cifrado scout con su metadata.
-/// </summary>
 public class CipherDefinition
 {
     public string Name { get; set; } = string.Empty;

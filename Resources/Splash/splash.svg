@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="456" height="456" viewBox="0 0 456 456" xmlns="http://www.w3.org/2000/svg">
+  <!-- Montaña ámbar (atrás) -->
+  <polygon points="40,456 148,80 310,456" fill="#D4883E" opacity="0.75"/>
+  <!-- Montaña verde musgo (medio) -->
+  <polygon points="90,456 210,100 370,456" fill="#4A7C59" opacity="0.85"/>
+  <!-- Montaña azul oscuro (frente) -->
+  <polygon points="140,456 270,120 430,456" fill="#1B2A4A"/>
+  <!-- Texto SC -->
+  <text x="228" y="248" text-anchor="middle" font-family="sans-serif" font-weight="bold" font-size="120" fill="white" letter-spacing="6">SC</text>
+</svg>

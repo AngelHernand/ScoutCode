@@ -2,11 +2,8 @@ using System.Text;
 
 namespace ScoutCode.Ciphers;
 
-/// <summary>
-/// Cifrado -1: cada letra se sustituye por la anterior en el alfabeto español (con Ñ).
-/// A → Z (wrap-around). Preserva case. No-letras se copian igual.
-/// Descifrar = aplicar +1.
-/// </summary>
+// Clave -1: cada letra se mueve una posicion atras en el alfabeto español.
+// A vuelve a Z. Descifrar es lo inverso (+1).
 public class ShiftMinusOneCipherAlgorithm : ICipherAlgorithm
 {
     public string DisplayName => "Clave -1";

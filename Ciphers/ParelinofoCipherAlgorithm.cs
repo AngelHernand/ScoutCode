@@ -1,12 +1,7 @@
 namespace ScoutCode.Ciphers;
 
-/// <summary>
-/// Cifrado Parelinofo: P↔U, A↔F, R↔O, E↔N, L↔I (y sus inversos).
-/// Simétrico. Preserva case. Todo lo demás se copia igual.
-/// 
-/// PARELINOFU:
-/// P↔U, A↔F, R↔O, E↔N, L↔I
-/// </summary>
+// Parelinofo: P<->U, A<->F, R<->O, E<->N, L<->I
+// Simetrico
 public class ParelinofoCipherAlgorithm : ICipherAlgorithm
 {
     public string DisplayName => "Parelinofo";

@@ -1,12 +1,7 @@
 namespace ScoutCode.Ciphers;
 
-/// <summary>
-/// Cifrado Dametupico: D↔O, A↔C, M↔I, E↔P, T↔U (y sus inversos).
-/// Simétrico. Preserva case. Todo lo demás se copia igual.
-///
-/// DAMETUPICO:
-/// D↔O, A↔C, M↔I, E↔P, T↔U
-/// </summary>
+// Dametupico: D<->O, A<->C, M<->I, E<->P, T<->U
+// Simetrico
 public class DametupicoCipherAlgorithm : ICipherAlgorithm
 {
     public string DisplayName => "Dametupico";

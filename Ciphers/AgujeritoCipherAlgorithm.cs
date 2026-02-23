@@ -1,12 +1,7 @@
 namespace ScoutCode.Ciphers;
 
-/// <summary>
-/// Cifrado Agujerito: A↔O, G↔T, U↔I, J↔R, E=E (se mantiene).
-/// Simétrico. Preserva case. Todo lo demás se copia igual.
-///
-/// AGUJERITO:
-/// A↔O, G↔T, U↔I, J↔R, E=E
-/// </summary>
+// Agujerito: A<->O, G<->T, U<->I, J<->R, la E se queda igual.
+// Simetrico
 public class AgujeritoCipherAlgorithm : ICipherAlgorithm
 {
     public string DisplayName => "Agujerito";
@@ -18,7 +13,7 @@ public class AgujeritoCipherAlgorithm : ICipherAlgorithm
         { 'G', 'T' }, { 'T', 'G' },
         { 'U', 'I' }, { 'I', 'U' },
         { 'J', 'R' }, { 'R', 'J' },
-        // E ↔ E: no hace falta, se mantiene
+        // la E no se toca
     };
 
     public string Encrypt(string input) => CipherUtils.ApplyCharMap(input, SwapMap);

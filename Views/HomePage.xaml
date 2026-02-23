@@ -11,7 +11,7 @@
 
     <Grid RowDefinitions="Auto,*">
 
-        <!-- ══════════ HEADER: Montañas + Título ══════════ -->
+        <!-- HEADER -->
         <Grid Grid.Row="0"
               HeightRequest="150"
               BackgroundColor="{StaticResource ScoutNavy}">
@@ -62,7 +62,7 @@
             </VerticalStackLayout>
         </Grid>
 
-        <!-- ══════════ CONTENIDO ══════════ -->
+        <!-- CONTENIDO -->
         <ScrollView Grid.Row="1">
             <VerticalStackLayout Padding="20,22,20,28" Spacing="14">
 

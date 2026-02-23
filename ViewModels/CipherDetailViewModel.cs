@@ -6,10 +6,7 @@ using ScoutCode.Services;
 
 namespace ScoutCode.ViewModels;
 
-/// <summary>
-/// ViewModel para la pantalla de detalle de cifrado.
-/// Maneja las operaciones de cifrado/descifrado manual y el placeholder de cámara.
-/// </summary>
+// ViewModel de la pantalla donde se cifra/descifra
 [QueryProperty(nameof(CipherTypeValue), "CipherType")]
 [QueryProperty(nameof(CipherName), "CipherName")]
 public partial class CipherDetailViewModel : ObservableObject
@@ -17,7 +14,7 @@ public partial class CipherDetailViewModel : ObservableObject
     private readonly ICipherService _cipherService;
     private readonly ICameraPipeline _cameraPipeline;
 
-    // --- Propiedades de navegación ---
+    // --- Propiedades de navegacion ---
 
     [ObservableProperty]
     private string _cipherName = string.Empty;
@@ -40,7 +37,7 @@ public partial class CipherDetailViewModel : ObservableObject
         }
     }
 
-    // --- Propiedades de modo ---
+    // --- Modo de entrada ---
 
     [ObservableProperty]
     private int _selectedTabIndex;
@@ -51,7 +48,7 @@ public partial class CipherDetailViewModel : ObservableObject
     [ObservableProperty]
     private bool _isCameraMode;
 
-    // --- Operación manual ---
+    // --- Cifrado manual ---
 
     [ObservableProperty]
     private int _selectedOperationIndex;
@@ -80,7 +77,7 @@ public partial class CipherDetailViewModel : ObservableObject
     [ObservableProperty]
     private string _operationLabel = "Cifrar";
 
-    // --- Cámara (placeholder) ---
+    // --- Camara (placeholder) ---
 
     [ObservableProperty]
     private string _cameraResultText = string.Empty;
@@ -112,7 +109,7 @@ public partial class CipherDetailViewModel : ObservableObject
     partial void OnSelectedOperationIndexChanged(int value)
     {
         OperationLabel = value == 0 ? "Cifrar" : "Descifrar";
-        // Limpiar resultado al cambiar operación
+        // Limpiar al cambiar de operacion
         OutputText = string.Empty;
         HasOutput = false;
         StatusMessage = string.Empty;
@@ -127,7 +124,7 @@ public partial class CipherDetailViewModel : ObservableObject
 
         if (string.IsNullOrWhiteSpace(InputText))
         {
-            StatusMessage = "⚠️ Por favor, ingresa un texto para procesar.";
+            StatusMessage = "Ingresa un texto para procesar.";
             HasError = true;
             return;
         }
@@ -138,7 +135,7 @@ public partial class CipherDetailViewModel : ObservableObject
 
             if (string.IsNullOrEmpty(result))
             {
-                StatusMessage = "⚠️ No se pudo procesar el texto. Verifica que los caracteres sean válidos.";
+                StatusMessage = "No se pudo procesar. Verifica que los caracteres sean validos.";
                 HasError = true;
                 OutputText = string.Empty;
                 HasOutput = false;
@@ -148,13 +145,13 @@ public partial class CipherDetailViewModel : ObservableObject
                 OutputText = result;
                 HasOutput = true;
                 StatusMessage = SelectedOperation == OperationMode.Encrypt
-                    ? "✅ Texto cifrado exitosamente."
-                    : "✅ Texto descifrado exitosamente.";
+                    ? "Texto cifrado."
+                    : "Texto descifrado.";
             }
         }
         catch (Exception ex)
         {
-            StatusMessage = $"❌ Error: {ex.Message}";
+            StatusMessage = $"Error: {ex.Message}";
             HasError = true;
             HasOutput = false;
         }
@@ -166,7 +163,7 @@ public partial class CipherDetailViewModel : ObservableObject
         if (string.IsNullOrEmpty(OutputText)) return;
 
         await Clipboard.Default.SetTextAsync(OutputText);
-        StatusMessage = "📋 Resultado copiado al portapapeles.";
+        StatusMessage = "Copiado al portapapeles.";
         HasError = false;
     }
 
@@ -180,7 +177,7 @@ public partial class CipherDetailViewModel : ObservableObject
         HasError = false;
     }
 
-    // --- Comandos de cámara (placeholder) ---
+    // --- Comandos de camara ---
 
     [RelayCommand]
     private async Task TakePhoto()
@@ -190,20 +187,19 @@ public partial class CipherDetailViewModel : ObservableObject
 
         try
         {
-            // Placeholder: intentar usar la cámara del dispositivo
+            // Placeholder: ver si el dispositivo soporta camara
             if (MediaPicker.Default.IsCaptureSupported)
             {
-                // En un futuro se capturará la foto real
-                CameraResultText = "📸 Captura de foto disponible.\nEl procesamiento de imagen estará disponible próximamente.";
+                CameraResultText = "Captura disponible. El procesamiento de imagen va a estar disponible mas adelante.";
             }
             else
             {
-                CameraResultText = "📸 La captura de fotos no está soportada en este dispositivo.";
+                CameraResultText = "La captura de fotos no esta soportada en este dispositivo.";
             }
         }
         catch
         {
-            CameraResultText = "📸 No se pudo acceder a la cámara.";
+            CameraResultText = "No se pudo acceder a la camara.";
         }
 
         HasCameraResult = true;
@@ -218,11 +214,11 @@ public partial class CipherDetailViewModel : ObservableObject
 
         try
         {
-            CameraResultText = "🖼️ Selección de imagen disponible.\nEl procesamiento de imagen estará disponible próximamente.";
+            CameraResultText = "Seleccion de imagen disponible. El procesamiento va a estar disponible mas adelante.";
         }
         catch
         {
-            CameraResultText = "🖼️ No se pudo seleccionar la imagen.";
+            CameraResultText = "No se pudo seleccionar la imagen.";
         }
 
         HasCameraResult = true;
@@ -243,7 +239,7 @@ public partial class CipherDetailViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            CameraResultText = $"❌ Error: {ex.Message}";
+            CameraResultText = $"Error: {ex.Message}";
             HasCameraResult = true;
         }
         finally

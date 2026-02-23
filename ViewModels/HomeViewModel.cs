@@ -6,10 +6,7 @@ using System.Collections.ObjectModel;
 
 namespace ScoutCode.ViewModels;
 
-/// <summary>
-/// ViewModel para la pantalla principal (HomePage).
-/// Muestra la lista de claves scout disponibles y gestiona la navegación.
-/// </summary>
+// ViewModel de la pantalla principal, carga la lista de cifrados
 public partial class HomeViewModel : ObservableObject
 {
     private readonly ICipherService _cipherService;

@@ -3,10 +3,8 @@ using ScoutCode.Models;
 
 namespace ScoutCode.Services;
 
-/// <summary>
-/// Implementación del servicio de cifrado.
-/// Mantiene un registro de algoritmos y enruta las solicitudes.
-/// </summary>
+// Registro de todos los cifrados. Recibe el tipo y la operacion
+// y lo manda al algoritmo que corresponde.
 public class CipherService : ICipherService
 {
     private readonly Dictionary<CipherType, ICipherAlgorithm> _algorithms;

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="ScoutCode.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:ScoutCode.Views"
+    Shell.FlyoutBehavior="Disabled"
+    Shell.NavBarIsVisible="True"
+    Title="ScoutCipher">
+
+    <Shell.BackgroundColor>
+        <OnPlatform x:TypeArguments="Color">
+            <On Platform="Android" Value="{StaticResource Primary}" />
+        </OnPlatform>
+    </Shell.BackgroundColor>
+
+    <ShellContent
+        Title="Home"
+        ContentTemplate="{DataTemplate views:HomePage}"
+        Route="HomePage"
+        Shell.NavBarIsVisible="False" />
+
+</Shell>

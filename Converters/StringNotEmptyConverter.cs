@@ -2,10 +2,7 @@ using System.Globalization;
 
 namespace ScoutCode.Converters;
 
-/// <summary>
-/// Convierte un string a bool: true si no está vacío.
-/// Útil para controlar visibilidad basada en texto.
-/// </summary>
+// Devuelve true si el string no esta vacio. Lo uso para mostrar/ocultar cosas en el XAML.
 public class StringNotEmptyConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)

@@ -2,11 +2,8 @@ using System.Text;
 
 namespace ScoutCode.Ciphers;
 
-/// <summary>
-/// Cifrado Morse: A-Z y 0-9 a código Morse y viceversa.
-/// Letras separadas por espacio, palabras separadas por " / ".
-/// Caracteres no reconocidos se copian igual.
-/// </summary>
+// Cifrado Morse: letras y numeros a puntos y rayas.
+// Las letras se separan con espacio, las palabras con " / ".
 public class MorseCipherAlgorithm : ICipherAlgorithm
 {
     public string DisplayName => "Morse";
@@ -65,7 +62,7 @@ public class MorseCipherAlgorithm : ICipherAlgorithm
             }
             else
             {
-                // Carácter no reconocido: copiar tal cual
+                // no lo reconozco, lo copio tal cual
                 if (!first)
                     sb.Append(' ');
                 sb.Append(c);
@@ -95,7 +92,7 @@ public class MorseCipherAlgorithm : ICipherAlgorithm
                 if (MorseToChar.TryGetValue(token, out var letter))
                     sb.Append(letter);
                 else
-                    sb.Append(token); // No reconocido: copiar igual
+                    sb.Append(token); // no lo reconozco, lo dejo como esta
             }
         }
 

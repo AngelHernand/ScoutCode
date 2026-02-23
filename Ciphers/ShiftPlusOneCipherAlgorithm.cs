@@ -2,11 +2,8 @@ using System.Text;
 
 namespace ScoutCode.Ciphers;
 
-/// <summary>
-/// Cifrado +1: cada letra se sustituye por la siguiente en el alfabeto español (con Ñ).
-/// Z → A (wrap-around). Preserva case. No-letras se copian igual.
-/// Descifrar = aplicar -1.
-/// </summary>
+// Clave +1: cada letra se mueve una posicion adelante en el alfabeto español.
+// Z vuelve a A. Descifrar es lo inverso (-1).
 public class ShiftPlusOneCipherAlgorithm : ICipherAlgorithm
 {
     public string DisplayName => "Clave +1";
@@ -31,7 +28,7 @@ public class ShiftPlusOneCipherAlgorithm : ICipherAlgorithm
             }
             else
             {
-                sb.Append(c); // no es letra española: copiar igual
+                sb.Append(c); // no es letra, lo dejo
             }
         }
         return sb.ToString();
