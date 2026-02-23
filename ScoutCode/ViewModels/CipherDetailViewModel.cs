@@ -10,6 +10,7 @@ namespace ScoutCode.ViewModels;
 // ViewModel de la pantalla donde se cifra/descifra
 [QueryProperty(nameof(CipherTypeValue), "CipherType")]
 [QueryProperty(nameof(CipherName), "CipherName")]
+[QueryProperty(nameof(CipherIcon), "CipherIcon")]
 public partial class CipherDetailViewModel : ObservableObject
 {
     private readonly ICipherService _cipherService;
@@ -20,6 +21,9 @@ public partial class CipherDetailViewModel : ObservableObject
 
     [ObservableProperty]
     private string _cipherName = string.Empty;
+
+    [ObservableProperty]
+    private string _cipherIcon = string.Empty;
 
     private CipherType _selectedCipher;
     public CipherType SelectedCipher

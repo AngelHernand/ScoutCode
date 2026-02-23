@@ -10,7 +10,7 @@
 
     <Shell.BackgroundColor>
         <OnPlatform x:TypeArguments="Color">
-            <On Platform="Android" Value="{StaticResource Primary}" />
+            <On Platform="Android" Value="{StaticResource HeaderDark}" />
         </OnPlatform>
     </Shell.BackgroundColor>
 

@@ -45,7 +45,8 @@ public partial class HomeViewModel : ObservableObject
         var parameters = new Dictionary<string, object>
         {
             { "CipherType", cipher.Type },
-            { "CipherName", cipher.Name }
+            { "CipherName", cipher.Name },
+            { "CipherIcon", cipher.Icon }
         };
 
         await Shell.Current.GoToAsync("CipherDetailPage", parameters);

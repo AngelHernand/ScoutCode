@@ -4,55 +4,89 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
-    <!-- Note: For Android please see also Platforms\Android\Resources\values\colors.xml -->
+    <!-- ── Primary Brand Colors ── -->
+    <Color x:Key="MountainBlue">#34657f</Color>
+    <Color x:Key="MountainGreen">#4a7a4e</Color>
+    <Color x:Key="MountainAmber">#d4943c</Color>
 
-    <!-- ── Core brand ── -->
-    <Color x:Key="Primary">#5D4E37</Color>
-    <Color x:Key="PrimaryDark">#C9B99A</Color>
-    <Color x:Key="PrimaryDarkText">#F5F0E8</Color>
-    <Color x:Key="Secondary">#F5F0E8</Color>
-    <Color x:Key="SecondaryDarkText">#8B7355</Color>
-    <Color x:Key="Tertiary">#3B6B4A</Color>
+    <!-- ── Mountain Shadow Colors ── -->
+    <Color x:Key="MountainBlueShadow">#2b5468</Color>
+    <Color x:Key="MountainGreenShadow">#3d6640</Color>
+    <Color x:Key="MountainAmberShadow">#c4842e</Color>
 
-    <Color x:Key="White">White</Color>
-    <Color x:Key="Black">#2C2418</Color>
+    <!-- ── Interface Colors ── -->
+    <Color x:Key="HeaderDark">#2c3e50</Color>
+    <Color x:Key="SkyTop">#1a2a3a</Color>
+    <Color x:Key="BackgroundColor">#f8f9fb</Color>
+    <Color x:Key="CardColor">#ffffff</Color>
+    <Color x:Key="BorderColor">#e5e7eb</Color>
+    <Color x:Key="MutedText">#7a7e85</Color>
+    <Color x:Key="ForegroundText">#1a1f2e</Color>
+    <Color x:Key="SecondaryBg">#f0f1f3</Color>
+    <Color x:Key="InputBg">#f5f6f8</Color>
+    <Color x:Key="FogEnd">#f5f6f8</Color>
+
+    <!-- ── Mode Indicator Colors ── -->
+    <Color x:Key="EncryptPillBg">#4a7a4e4D</Color>
+    <Color x:Key="EncryptPillText">#8dbb8f</Color>
+    <Color x:Key="DecryptPillBg">#34657f4D</Color>
+    <Color x:Key="DecryptPillText">#7cb3cc</Color>
+
+    <!-- ── Derived Opacity Colors ── -->
+    <Color x:Key="MountainGreen15">#264a7a4e</Color>
+    <Color x:Key="MountainBlue15">#2634657f</Color>
+    <Color x:Key="MountainAmber10">#1Ad4943c</Color>
+    <Color x:Key="MountainAmber15">#26d4943c</Color>
+
+    <!-- ── Compat aliases ── -->
+    <Color x:Key="Primary">#34657f</Color>
+    <Color x:Key="PrimaryDark">#2b5468</Color>
+    <Color x:Key="PrimaryDarkText">#f8f9fb</Color>
+    <Color x:Key="Secondary">#f0f1f3</Color>
+    <Color x:Key="SecondaryDarkText">#7a7e85</Color>
+    <Color x:Key="Tertiary">#4a7a4e</Color>
+
+    <Color x:Key="White">#ffffff</Color>
+    <Color x:Key="Black">#1a1f2e</Color>
     <Color x:Key="Magenta">#D600AA</Color>
-    <Color x:Key="MidnightBlue">#2C2418</Color>
-    <Color x:Key="OffBlack">#1A1610</Color>
+    <Color x:Key="MidnightBlue">#1a1f2e</Color>
+    <Color x:Key="OffBlack">#0f1318</Color>
 
-    <!-- ── Scout mountain palette ── -->
-    <Color x:Key="ScoutOrange">#D4883E</Color>
-    <Color x:Key="ScoutGreen">#4A7C59</Color>
-    <Color x:Key="ScoutNavy">#2C3E2E</Color>
-    <Color x:Key="ScoutBg">#FAF8F5</Color>
-    <Color x:Key="ScoutCardBg">#FFFFFF</Color>
-    <Color x:Key="ScoutCardBorder">#E8E3DA</Color>
+    <!-- ── Scout palette aliases ── -->
+    <Color x:Key="ScoutOrange">#d4943c</Color>
+    <Color x:Key="ScoutGreen">#4a7a4e</Color>
+    <Color x:Key="ScoutNavy">#2c3e50</Color>
+    <Color x:Key="ScoutBg">#f8f9fb</Color>
+    <Color x:Key="ScoutCardBg">#ffffff</Color>
+    <Color x:Key="ScoutCardBorder">#e5e7eb</Color>
 
-    <!-- ── Accent extras ── -->
-    <Color x:Key="AccentTeal">#3B6B4A</Color>
-    <Color x:Key="AccentAmber">#D4883E</Color>
-    <Color x:Key="AccentIndigo">#5D4E37</Color>
-    <Color x:Key="SurfaceLight">#F3EFE8</Color>
-    <Color x:Key="SurfaceMuted">#E0DAD0</Color>
-    <Color x:Key="SuccessBg">#F0F7F1</Color>
-    <Color x:Key="SuccessBorder">#B8D4BE</Color>
-    <Color x:Key="SuccessText">#2D5A3A</Color>
+    <!-- ── Accent aliases ── -->
+    <Color x:Key="AccentTeal">#4a7a4e</Color>
+    <Color x:Key="AccentAmber">#d4943c</Color>
+    <Color x:Key="AccentIndigo">#34657f</Color>
+    <Color x:Key="SurfaceLight">#f0f1f3</Color>
+    <Color x:Key="SurfaceMuted">#e5e7eb</Color>
+    <Color x:Key="SuccessBg">#f0fdf4</Color>
+    <Color x:Key="SuccessBorder">#bbf7d0</Color>
+    <Color x:Key="SuccessText">#166534</Color>
 
-    <Color x:Key="Gray100">#F3EFE8</Color>
-    <Color x:Key="Gray200">#E0DAD0</Color>
-    <Color x:Key="Gray300">#C4BAA8</Color>
-    <Color x:Key="Gray400">#9C9080</Color>
-    <Color x:Key="Gray500">#736A5C</Color>
-    <Color x:Key="Gray600">#504840</Color>
-    <Color x:Key="Gray700">#3A3330</Color>
-    <Color x:Key="Gray900">#2C2418</Color>
-    <Color x:Key="Gray950">#1A1610</Color>
+    <!-- ── Gray Scale ── -->
+    <Color x:Key="Gray100">#f0f1f3</Color>
+    <Color x:Key="Gray200">#e5e7eb</Color>
+    <Color x:Key="Gray300">#d1d5db</Color>
+    <Color x:Key="Gray400">#7a7e85</Color>
+    <Color x:Key="Gray500">#6b7280</Color>
+    <Color x:Key="Gray600">#4b5563</Color>
+    <Color x:Key="Gray700">#374151</Color>
+    <Color x:Key="Gray900">#1a1f2e</Color>
+    <Color x:Key="Gray950">#0f1318</Color>
 
-    <!-- Warning / OCR -->
-    <Color x:Key="WarningBg">#FDF6EC</Color>
-    <Color x:Key="WarningBorder">#E8D5B0</Color>
-    <Color x:Key="WarningText">#8B6914</Color>
+    <!-- ── Warning / OCR ── -->
+    <Color x:Key="WarningBg">#fff7ed</Color>
+    <Color x:Key="WarningBorder">#fed7aa</Color>
+    <Color x:Key="WarningText">#9a3412</Color>
 
+    <!-- ── Brushes ── -->
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}"/>
     <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource Secondary}"/>
     <SolidColorBrush x:Key="TertiaryBrush" Color="{StaticResource Tertiary}"/>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ScoutCode.ViewModels"
+             x:Class="ScoutCode.Views.CameraSectionView"
+             x:DataType="vm:CipherDetailViewModel">
+
+    <VerticalStackLayout Spacing="14">
+
+        <!-- Banner: cipher NOT compatible with OCR -->
+        <Border IsVisible="{Binding IsOcrSupported, Converter={StaticResource InvertedBoolConverter}}"
+                BackgroundColor="{StaticResource WarningBg}"
+                Stroke="{StaticResource WarningBorder}"
+                StrokeShape="RoundRectangle 12"
+                StrokeThickness="1"
+                Padding="14">
+            <VerticalStackLayout Spacing="4">
+                <Label Text="Reconocimiento de símbolos"
+                       FontSize="14"
+                       FontFamily="InterSemiBold"
+                       TextColor="{StaticResource WarningText}" />
+                <Label Text="Este cifrado requiere reconocimiento de símbolos gráficos (próximamente)."
+                       FontSize="12"
+                       FontFamily="InterRegular"
+                       TextColor="{StaticResource MutedText}" />
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- OCR Controls -->
+        <VerticalStackLayout IsVisible="{Binding IsOcrSupported}" Spacing="12">
+
+            <!-- Preview image -->
+            <Border IsVisible="{Binding HasPreviewImage}"
+                    BackgroundColor="{StaticResource SecondaryBg}"
+                    Stroke="{StaticResource BorderColor}"
+                    StrokeShape="RoundRectangle 14"
+                    StrokeThickness="1"
+                    HeightRequest="200">
+                <Image Source="{Binding PreviewImageSource}"
+                       Aspect="AspectFit" />
+            </Border>
+
+            <!-- Placeholder if no image -->
+            <Border IsVisible="{Binding HasPreviewImage, Converter={StaticResource InvertedBoolConverter}}"
+                    BackgroundColor="{StaticResource SecondaryBg}"
+                    Stroke="{StaticResource BorderColor}"
+                    StrokeShape="RoundRectangle 14"
+                    StrokeThickness="1.5"
+                    StrokeDashArray="8,4"
+                    HeightRequest="200">
+                <VerticalStackLayout VerticalOptions="Center"
+                                     HorizontalOptions="Center"
+                                     Spacing="8">
+                    <Label Text="📷"
+                           FontSize="40"
+                           HorizontalTextAlignment="Center" />
+                    <Label Text="Toma o selecciona una foto del texto cifrado"
+                           FontSize="12"
+                           FontFamily="InterRegular"
+                           TextColor="{StaticResource MutedText}"
+                           HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Capture buttons -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                <Button Text="Tomar foto"
+                        Grid.Column="0"
+                        Command="{Binding TakePhotoCommand}"
+                        IsEnabled="{Binding IsProcessing, Converter={StaticResource InvertedBoolConverter}}"
+                        BackgroundColor="{StaticResource MountainBlue}"
+                        TextColor="White"
+                        FontFamily="InterSemiBold"
+                        CornerRadius="12"
+                        HeightRequest="48" />
+                <Button Text="Elegir foto"
+                        Grid.Column="1"
+                        Command="{Binding PickPhotoCommand}"
+                        IsEnabled="{Binding IsProcessing, Converter={StaticResource InvertedBoolConverter}}"
+                        BackgroundColor="{StaticResource SecondaryBg}"
+                        TextColor="{StaticResource MountainBlue}"
+                        FontFamily="InterSemiBold"
+                        CornerRadius="12"
+                        HeightRequest="48" />
+            </Grid>
+
+            <!-- OCR Status -->
+            <Label Text="{Binding OcrStatusMessage}"
+                   IsVisible="{Binding OcrStatusMessage, Converter={StaticResource StringNotEmptyConverter}}"
+                   FontSize="12"
+                   FontFamily="InterRegular"
+                   TextColor="{StaticResource MutedText}"
+                   HorizontalTextAlignment="Center"
+                   Margin="0,4" />
+
+            <ActivityIndicator IsRunning="{Binding IsProcessing}"
+                               IsVisible="{Binding IsProcessing}"
+                               Color="{StaticResource MountainGreen}"
+                               HorizontalOptions="Center" />
+
+            <!-- Recognized text -->
+            <VerticalStackLayout IsVisible="{Binding HasCameraResult}" Spacing="10">
+                <Label Text="TEXTO RECONOCIDO (editable)"
+                       FontSize="11"
+                       FontFamily="InterSemiBold"
+                       TextTransform="Uppercase"
+                       CharacterSpacing="1.5"
+                       TextColor="{StaticResource MutedText}"
+                       Margin="2,4,0,0" />
+
+                <Border Stroke="{StaticResource BorderColor}"
+                        StrokeShape="RoundRectangle 12"
+                        StrokeThickness="1"
+                        Padding="14,10"
+                        MinimumHeightRequest="100"
+                        BackgroundColor="{StaticResource CardColor}">
+                    <Editor Text="{Binding CameraResultText}"
+                            Placeholder="El texto reconocido aparecerá aquí..."
+                            PlaceholderColor="{StaticResource MutedText}"
+                            AutoSize="TextChanges"
+                            MinimumHeightRequest="90"
+                            FontSize="14"
+                            FontFamily="InterRegular"
+                            TextColor="{StaticResource ForegroundText}" />
+                </Border>
+
+                <Button Text="🔓 Descifrar"
+                        Command="{Binding ProcessCameraCommand}"
+                        IsEnabled="{Binding IsProcessing, Converter={StaticResource InvertedBoolConverter}}"
+                        BackgroundColor="{StaticResource MountainBlue}"
+                        TextColor="White"
+                        FontFamily="InterBold"
+                        FontSize="14"
+                        CornerRadius="12"
+                        HeightRequest="48" />
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+
+    </VerticalStackLayout>
+
+</ContentView>

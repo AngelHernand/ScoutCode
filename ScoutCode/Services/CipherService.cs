@@ -51,7 +51,10 @@ public class CipherService : ICipherService
 
     public List<CipherDefinition> GetAvailableCiphers()
     {
-        return new List<CipherDefinition>
+        // Color cycle: Blue → Green → Amber (repeats)
+        string[] accentCycle = { "#34657f", "#4a7a4e", "#d4943c" };
+
+        var ciphers = new List<CipherDefinition>
         {
             new()
             {
@@ -150,5 +153,11 @@ public class CipherService : ICipherService
                 IsAvailable = true
             },
         };
+
+        // Assign cycling accent colors
+        for (int i = 0; i < ciphers.Count; i++)
+            ciphers[i].AccentColorHex = accentCycle[i % accentCycle.Length];
+
+        return ciphers;
     }
 }
