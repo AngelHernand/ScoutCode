@@ -146,6 +146,4 @@ dotnet test ScoutCode.Tests/ScoutCode.Tests.csproj
 - Los cifrados simetricos (Cenit-Polar, Baden-Powell, Parelinofo, Dametupico, Agujerito) usan la misma operacion para cifrar y descifrar
 - El modulo de camara esta preparado pero todavia no hace nada real, es un placeholder para cuando se integre OpenCV y ONNX
 
-## Licencia
 
-Proyecto educativo para actividades scout.
