@@ -41,12 +41,15 @@ public partial class CipherDetailViewModel : ObservableObject
             OnPropertyChanged(nameof(SelectedCipher));
             SupportedCharsInfo = _cipherService.GetSupportedCharacters(SelectedCipher);
             IsOcrSupported = IsOcrCompatibleCipher() && _textRecognitionService.IsAvailable;
-            IsSymbolicCipher = SelectedCipher == CipherType.Gato || SelectedCipher == CipherType.Semaforo;
+            IsSymbolicCipher = SelectedCipher == CipherType.Gato || SelectedCipher == CipherType.Semaforo || SelectedCipher == CipherType.Electrica;
             if (IsSymbolicCipher)
             {
-                SymbolicCipherInfoText = SelectedCipher == CipherType.Semaforo
-                    ? "Cifrado Semáforo: cada letra se representa con una posición de banderas."
-                    : "Cifrado Gato (Pigpen): cada letra se representa con un símbolo gráfico único.";
+                SymbolicCipherInfoText = SelectedCipher switch
+                {
+                    CipherType.Semaforo => "Cifrado Semáforo: cada letra se representa con una posición de banderas.",
+                    CipherType.Electrica => "Cifrado Eléctrica: cada letra se representa con un símbolo en líneas eléctricas.",
+                    _ => "Cifrado Gato (Pigpen): cada letra se representa con un símbolo gráfico único."
+                };
                 LoadSymbolicSymbols();
             }
         }
@@ -267,6 +270,27 @@ public partial class CipherDetailViewModel : ObservableObject
                 });
             }
         }
+        else if (SelectedCipher == CipherType.Electrica)
+        {
+            // Eléctrica: A-Z (26 letras, sin Ñ) + espacio
+            for (char c = 'A'; c <= 'Z'; c++)
+            {
+                var key = c.ToString().ToLowerInvariant();
+                GatoSymbols.Add(new GatoSymbolViewModel
+                {
+                    Key = key,
+                    Letter = c.ToString(),
+                    ImageSource = $"electrica_{key}.png"
+                });
+            }
+            // Agregar símbolo de espacio
+            GatoSymbols.Add(new GatoSymbolViewModel
+            {
+                Key = "space",
+                Letter = "ESP",
+                ImageSource = "electrica_space.png"
+            });
+        }
     }
 
     // --- Cifrado Gato: cifrar (texto → símbolos) ---
@@ -297,9 +321,13 @@ public partial class CipherDetailViewModel : ObservableObject
                 return;
             }
 
-            // Parsear "GATO:h,o,l,a" o "SEMAFORO:h,o,l,a" → lista de imágenes
-            var prefix = SelectedCipher == CipherType.Semaforo ? "SEMAFORO:" : "GATO:";
-            var imagePrefix = SelectedCipher == CipherType.Semaforo ? "semaforo" : "gato";
+            // Parsear "GATO:h,o,l,a", "SEMAFORO:h,o,l,a" o "ELECTRICA:h,o,l,a" → lista de imágenes
+            var (prefix, imagePrefix) = SelectedCipher switch
+            {
+                CipherType.Semaforo => ("SEMAFORO:", "semaforo"),
+                CipherType.Electrica => ("ELECTRICA:", "electrica"),
+                _ => ("GATO:", "gato")
+            };
 
             if (result.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
             {
@@ -308,7 +336,8 @@ public partial class CipherDetailViewModel : ObservableObject
                 foreach (var k in keys)
                 {
                     var trimmed = k.Trim();
-                    if (trimmed == " " || trimmed == "")
+                    if (trimmed == " " || trimmed == ""
+                        || trimmed.Equals("space", StringComparison.OrdinalIgnoreCase))
                     {
                         // Espacio → no agregar símbolo, se puede representar con gap
                         GatoEncryptedSymbols.Add(new GatoSymbolViewModel
@@ -331,7 +360,12 @@ public partial class CipherDetailViewModel : ObservableObject
                     }
                 }
                 HasGatoEncryptResult = true;
-                var cipherLabel = SelectedCipher == CipherType.Semaforo ? "Semáforo" : "Gato";
+                var cipherLabel = SelectedCipher switch
+                {
+                    CipherType.Semaforo => "Semáforo",
+                    CipherType.Electrica => "Eléctrica",
+                    _ => "Gato"
+                };
                 StatusMessage = $"Texto cifrado en símbolos {cipherLabel}.";
             }
         }
@@ -413,9 +447,14 @@ public partial class CipherDetailViewModel : ObservableObject
 
         try
         {
-            // Reconstruir formato "GATO:h,o,l,a" o "SEMAFORO:h,o,l,a"
+            // Reconstruir formato "GATO:h,o,l,a", "SEMAFORO:h,o,l,a" o "ELECTRICA:h,o,l,a"
             var keys = SelectedGatoSymbols.Select(s => s.Key);
-            var symbolicPrefix = SelectedCipher == CipherType.Semaforo ? "SEMAFORO:" : "GATO:";
+            var symbolicPrefix = SelectedCipher switch
+            {
+                CipherType.Semaforo => "SEMAFORO:",
+                CipherType.Electrica => "ELECTRICA:",
+                _ => "GATO:"
+            };
             var gatoInput = symbolicPrefix + string.Join(",", keys);
 
             var result = _cipherService.Process(SelectedCipher, OperationMode.Decrypt, gatoInput);
@@ -434,8 +473,10 @@ public partial class CipherDetailViewModel : ObservableObject
 
     private bool IsOcrCompatibleCipher()
     {
-        // Gato y Semáforo usan símbolos gráficos → OCR de texto no sirve.
-        return SelectedCipher != CipherType.Gato && SelectedCipher != CipherType.Semaforo;
+        // Gato, Semáforo y Eléctrica usan símbolos gráficos → OCR de texto no sirve.
+        return SelectedCipher != CipherType.Gato
+            && SelectedCipher != CipherType.Semaforo
+            && SelectedCipher != CipherType.Electrica;
     }
 
     // --- Comandos de camara ---

@@ -26,6 +26,7 @@ public class CipherService : ICipherService
             { CipherType.Agujerito, new AgujeritoCipherAlgorithm() },
             { CipherType.Gato, new GatoCipherAlgorithm() },
             { CipherType.Semaforo, new SemaforoCipherAlgorithm() },
+            { CipherType.Electrica, new ElectricaCipherAlgorithm() },
         };
     }
 
@@ -52,7 +53,7 @@ public class CipherService : ICipherService
 
     public List<CipherDefinition> GetAvailableCiphers()
     {
-        // Color cycle: Blue → Green → Amber (repeats)
+        // Color cycle: Blue -> Green -> Amber (repeats)
         string[] accentCycle = { "#34657f", "#4a7a4e", "#d4943c" };
 
         var ciphers = new List<CipherDefinition>
@@ -84,7 +85,7 @@ public class CipherService : ICipherService
             new()
             {
                 Name = "Cenit-Polar",
-                Description = "Intercambio: C↔P, E↔O, N↔L, I↔A, T↔R.",
+                Description = "Intercambio: C<->P, E<->O, N<->L, I<->A, T<->R.",
                 Type = CipherType.CenitPolar,
                 Icon = "CP",
                 IsAvailable = true
@@ -92,7 +93,7 @@ public class CipherService : ICipherService
             new()
             {
                 Name = "Baden-Powell",
-                Description = "Intercambio: B↔P, A↔O, D↔W, E=E, N↔L.",
+                Description = "Intercambio: B<->P, A<->O, D<->W, E=E, N<->L.",
                 Type = CipherType.BadenPowel,
                 Icon = "BP",
                 IsAvailable = true
@@ -108,7 +109,7 @@ public class CipherService : ICipherService
             new()
             {
                 Name = "Clave +1",
-                Description = "Cada letra → la siguiente (con Ñ, Z→A).",
+                Description = "Cada letra <-> la siguiente (con Ñ, Z→A).",
                 Type = CipherType.ShiftPlusOne,
                 Icon = "+1",
                 IsAvailable = true
@@ -116,7 +117,7 @@ public class CipherService : ICipherService
             new()
             {
                 Name = "Clave -1",
-                Description = "Cada letra → la anterior (con Ñ, A→Z).",
+                Description = "Cada letra <-> la anterior (con Ñ, A<->Z).",
                 Type = CipherType.ShiftMinusOne,
                 Icon = "-1",
                 IsAvailable = true
@@ -124,7 +125,7 @@ public class CipherService : ICipherService
             new()
             {
                 Name = "Parelinofo",
-                Description = "Intercambio: P↔U, A↔F, R↔O, E↔N, L↔I.",
+                Description = "Intercambio: P<->U, A<->F, R<->O, E<->N, L<->I.",
                 Type = CipherType.Parelinofo,
                 Icon = "PA",
                 IsAvailable = true
@@ -132,7 +133,7 @@ public class CipherService : ICipherService
             new()
             {
                 Name = "Dametupico",
-                Description = "Intercambio: D↔O, A↔C, M↔I, E↔P, T↔U.",
+                Description = "Intercambio: D<->O, A<->C, M<->I, E<->P, T<->U.",
                 Type = CipherType.Dametupico,
                 Icon = "DA",
                 IsAvailable = true
@@ -140,7 +141,7 @@ public class CipherService : ICipherService
             new()
             {
                 Name = "Agujerito",
-                Description = "Intercambio: A↔O, G↔T, U↔I, J↔R, E=E.",
+                Description = "Intercambio: A<->O, G<->T, U<->I, J<->R, E=E.",
                 Type = CipherType.Agujerito,
                 Icon = "AG",
                 IsAvailable = true
@@ -148,7 +149,7 @@ public class CipherService : ICipherService
             new()
             {
                 Name = "Gato (Pigpen)",
-                Description = "Cada letra → símbolo gráfico (cuadrículas y aspas).",
+                Description = "Cada letra <-> símbolo gráfico (cuadrículas y aspas).",
                 Type = CipherType.Gato,
                 Icon = "GA",
                 IsAvailable = true
@@ -156,9 +157,17 @@ public class CipherService : ICipherService
             new()
             {
                 Name = "Semáforo",
-                Description = "Cada letra → posición de banderas de semáforo.",
+                Description = "Cada letra <-> posición de banderas de semáforo.",
                 Type = CipherType.Semaforo,
                 Icon = "SE",
+                IsAvailable = true
+            },
+            new()
+            {
+                Name = "Eléctrica",
+                Description = "Cada letra <-> símbolo en líneas eléctricas.",
+                Type = CipherType.Electrica,
+                Icon = "EL",
                 IsAvailable = true
             },
         };

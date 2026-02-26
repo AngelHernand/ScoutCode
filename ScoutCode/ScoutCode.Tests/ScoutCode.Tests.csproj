@@ -20,24 +20,27 @@
 
   <!-- Enlazamos los archivos fuente del proyecto MAUI directamente (no ProjectReference) -->
   <ItemGroup>
-    <Compile Include="..\ScoutCode\Models\CipherType.cs" Link="Models\CipherType.cs" />
-    <Compile Include="..\ScoutCode\Models\OperationMode.cs" Link="Models\OperationMode.cs" />
-    <Compile Include="..\ScoutCode\Models\CipherDefinition.cs" Link="Models\CipherDefinition.cs" />
-    <Compile Include="..\ScoutCode\Ciphers\ICipherAlgorithm.cs" Link="Ciphers\ICipherAlgorithm.cs" />
-    <Compile Include="..\ScoutCode\Ciphers\CipherUtils.cs" Link="Ciphers\CipherUtils.cs" />
-    <Compile Include="..\ScoutCode\Ciphers\MorseCipherAlgorithm.cs" Link="Ciphers\MorseCipherAlgorithm.cs" />
-    <Compile Include="..\ScoutCode\Ciphers\NumericCipherAlgorithm.cs" Link="Ciphers\NumericCipherAlgorithm.cs" />
-    <Compile Include="..\ScoutCode\Ciphers\CellphoneCipherAlgorithm.cs" Link="Ciphers\CellphoneCipherAlgorithm.cs" />
-    <Compile Include="..\ScoutCode\Ciphers\CenitPolarCipherAlgorithm.cs" Link="Ciphers\CenitPolarCipherAlgorithm.cs" />
-    <Compile Include="..\ScoutCode\Ciphers\BadenPowelCipherAlgorithm.cs" Link="Ciphers\BadenPowelCipherAlgorithm.cs" />
-    <Compile Include="..\ScoutCode\Ciphers\MurcielagoCipherAlgorithm.cs" Link="Ciphers\MurcielagoCipherAlgorithm.cs" />
-    <Compile Include="..\ScoutCode\Ciphers\ShiftPlusOneCipherAlgorithm.cs" Link="Ciphers\ShiftPlusOneCipherAlgorithm.cs" />
-    <Compile Include="..\ScoutCode\Ciphers\ShiftMinusOneCipherAlgorithm.cs" Link="Ciphers\ShiftMinusOneCipherAlgorithm.cs" />
-    <Compile Include="..\ScoutCode\Ciphers\ParelinofoCipherAlgorithm.cs" Link="Ciphers\ParelinofoCipherAlgorithm.cs" />
-    <Compile Include="..\ScoutCode\Ciphers\DametupicoCipherAlgorithm.cs" Link="Ciphers\DametupicoCipherAlgorithm.cs" />
-    <Compile Include="..\ScoutCode\Ciphers\AgujeritoCipherAlgorithm.cs" Link="Ciphers\AgujeritoCipherAlgorithm.cs" />
-    <Compile Include="..\ScoutCode\Services\ICipherService.cs" Link="Services\ICipherService.cs" />
-    <Compile Include="..\ScoutCode\Services\CipherService.cs" Link="Services\CipherService.cs" />
+    <Compile Include="..\Models\CipherType.cs" Link="Models\CipherType.cs" />
+    <Compile Include="..\Models\OperationMode.cs" Link="Models\OperationMode.cs" />
+    <Compile Include="..\Models\CipherDefinition.cs" Link="Models\CipherDefinition.cs" />
+    <Compile Include="..\Ciphers\ICipherAlgorithm.cs" Link="Ciphers\ICipherAlgorithm.cs" />
+    <Compile Include="..\Ciphers\CipherUtils.cs" Link="Ciphers\CipherUtils.cs" />
+    <Compile Include="..\Ciphers\MorseCipherAlgorithm.cs" Link="Ciphers\MorseCipherAlgorithm.cs" />
+    <Compile Include="..\Ciphers\NumericCipherAlgorithm.cs" Link="Ciphers\NumericCipherAlgorithm.cs" />
+    <Compile Include="..\Ciphers\CellphoneCipherAlgorithm.cs" Link="Ciphers\CellphoneCipherAlgorithm.cs" />
+    <Compile Include="..\Ciphers\CenitPolarCipherAlgorithm.cs" Link="Ciphers\CenitPolarCipherAlgorithm.cs" />
+    <Compile Include="..\Ciphers\BadenPowelCipherAlgorithm.cs" Link="Ciphers\BadenPowelCipherAlgorithm.cs" />
+    <Compile Include="..\Ciphers\MurcielagoCipherAlgorithm.cs" Link="Ciphers\MurcielagoCipherAlgorithm.cs" />
+    <Compile Include="..\Ciphers\ShiftPlusOneCipherAlgorithm.cs" Link="Ciphers\ShiftPlusOneCipherAlgorithm.cs" />
+    <Compile Include="..\Ciphers\ShiftMinusOneCipherAlgorithm.cs" Link="Ciphers\ShiftMinusOneCipherAlgorithm.cs" />
+    <Compile Include="..\Ciphers\ParelinofoCipherAlgorithm.cs" Link="Ciphers\ParelinofoCipherAlgorithm.cs" />
+    <Compile Include="..\Ciphers\DametupicoCipherAlgorithm.cs" Link="Ciphers\DametupicoCipherAlgorithm.cs" />
+    <Compile Include="..\Ciphers\AgujeritoCipherAlgorithm.cs" Link="Ciphers\AgujeritoCipherAlgorithm.cs" />
+    <Compile Include="..\Ciphers\GatoCipherAlgorithm.cs" Link="Ciphers\GatoCipherAlgorithm.cs" />
+    <Compile Include="..\Ciphers\SemaforoCipherAlgorithm.cs" Link="Ciphers\SemaforoCipherAlgorithm.cs" />
+    <Compile Include="..\Ciphers\ElectricaCipherAlgorithm.cs" Link="Ciphers\ElectricaCipherAlgorithm.cs" />
+    <Compile Include="..\Services\ICipherService.cs" Link="Services\ICipherService.cs" />
+    <Compile Include="..\Services\CipherService.cs" Link="Services\CipherService.cs" />
   </ItemGroup>
 
 </Project>

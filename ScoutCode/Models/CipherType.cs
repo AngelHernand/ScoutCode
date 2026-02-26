@@ -14,5 +14,6 @@ public enum CipherType
     Dametupico,
     Agujerito,
     Gato,
-    Semaforo
+    Semaforo,
+    Electrica
 }
