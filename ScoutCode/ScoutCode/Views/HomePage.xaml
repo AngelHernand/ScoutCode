@@ -1,0 +1,216 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ScoutCode.ViewModels"
+             xmlns:models="clr-namespace:ScoutCode.Models"
+             xmlns:controls="clr-namespace:ScoutCode.Controls"
+             x:Class="ScoutCode.Views.HomePage"
+             x:DataType="vm:HomeViewModel"
+             Title="{Binding Title}"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{StaticResource BackgroundColor}">
+
+    <Grid RowDefinitions="220,*">
+
+        <!--  -->
+        <!-- MOUNTAIN HEADER (220dp)          -->
+        <!--  -->
+        <Grid Grid.Row="0">
+            <!-- Mountain landscape drawn via IDrawable -->
+            <GraphicsView x:Name="MountainHeader"
+                          Drawable="{x:Static controls:MountainDrawable.Instance}"
+                          HeightRequest="220"
+                          VerticalOptions="Fill"
+                          HorizontalOptions="Fill" />
+
+            <!-- Title overlay: "Scout" / "Code"  right-aligned -->
+            <VerticalStackLayout HorizontalOptions="End"
+                                 VerticalOptions="Center"
+                                 Padding="0,0,28,0"
+                                 Spacing="0">
+                <Label Text="Scout"
+                       FontSize="40"
+                       FontFamily="InterExtraBold"
+                       TextColor="White"
+                       HorizontalTextAlignment="End"
+                       LineHeight="1.0" />
+                <Label Text="Code"
+                       FontSize="40"
+                       FontFamily="InterExtraBold"
+                       TextColor="{StaticResource MountainAmber}"
+                       HorizontalTextAlignment="End"
+                       Margin="0,-6,0,0"
+                       LineHeight="1.0" />
+            </VerticalStackLayout>
+        </Grid>
+
+        <!--  -->
+        <!-- CONTENT SECTION                  -->
+        <!--  -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="24,18,24,28" Spacing="14" MaximumWidthRequest="448">
+
+                <!-- Stat pills row -->
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="8" Margin="0,0,0,6">
+                    <!-- Pill: count -->
+                    <Border BackgroundColor="{StaticResource SecondaryBg}"
+                            Stroke="Transparent"
+                            StrokeShape="RoundRectangle 999"
+                            Padding="12,6"
+                            HeightRequest="28">
+                        <Label FontSize="11"
+                               FontFamily="InterMedium"
+                               TextColor="{StaticResource MutedText}"
+                               VerticalTextAlignment="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding Ciphers.Count}" FontFamily="InterSemiBold" TextColor="{StaticResource ForegroundText}" />
+                                    <Span Text=" cifrados" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </Border>
+                    <!-- Pill: offline -->
+                    <Border BackgroundColor="{StaticResource SecondaryBg}"
+                            Stroke="Transparent"
+                            StrokeShape="RoundRectangle 999"
+                            Padding="12,6"
+                            HeightRequest="28">
+                        <Label Text="100% Offline"
+                               FontSize="11"
+                               FontFamily="InterMedium"
+                               TextColor="{StaticResource MutedText}"
+                               VerticalTextAlignment="Center" />
+                    </Border>
+                </HorizontalStackLayout>
+
+                <!-- Section header -->
+                <Label Text="SELECCIONA UNA CLAVE"
+                       FontSize="11"
+                       FontFamily="InterSemiBold"
+                       TextTransform="Uppercase"
+                       CharacterSpacing="1.5"
+                       Margin="2,0,0,2"
+                       TextColor="{StaticResource MutedText}" />
+
+                <!-- Cipher cards -->
+                <CollectionView x:Name="CipherList"
+                                ItemsSource="{Binding Ciphers}"
+                                SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:CipherDefinition">
+                            <Border Stroke="{StaticResource BorderColor}"
+                                    StrokeShape="RoundRectangle 16"
+                                    StrokeThickness="1"
+                                    Padding="16,14,12,14"
+                                    Margin="0,0,0,10"
+                                    BackgroundColor="{StaticResource CardColor}">
+                                <Border.Shadow>
+                                    <Shadow Brush="#0D1a1f2e"
+                                            Offset="0,2"
+                                            Radius="8"
+                                            Opacity="0.35" />
+                                </Border.Shadow>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:HomeViewModel}}, Path=NavigateToCipherCommand}"
+                                        CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
+
+                                <Grid ColumnDefinitions="48,*,20" ColumnSpacing="16">
+                                    <!-- Badge with accent color -->
+                                    <Border Grid.Column="0"
+                                            BackgroundColor="{Binding AccentColorHex, Converter={StaticResource HexToColorConverter}}"
+                                            StrokeShape="RoundRectangle 12"
+                                            Stroke="Transparent"
+                                            StrokeThickness="0"
+                                            HeightRequest="48"
+                                            WidthRequest="48"
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center">
+                                        <Label Text="{Binding Icon}"
+                                               FontSize="16"
+                                               FontFamily="InterBold"
+                                               TextColor="White"
+                                               HorizontalTextAlignment="Center"
+                                               VerticalTextAlignment="Center" />
+                                    </Border>
+
+                                    <!-- Cipher info -->
+                                    <VerticalStackLayout Grid.Column="1"
+                                                         VerticalOptions="Center"
+                                                         Spacing="2">
+                                        <Label Text="{Binding Name}"
+                                               FontSize="14"
+                                               FontFamily="InterSemiBold"
+                                               TextColor="{StaticResource ForegroundText}" />
+                                        <Label Text="{Binding Description}"
+                                               FontSize="12"
+                                               FontFamily="InterRegular"
+                                               TextColor="{StaticResource MutedText}"
+                                               LineBreakMode="TailTruncation"
+                                               MaxLines="1" />
+                                    </VerticalStackLayout>
+
+                                    <!-- Chevron -->
+                                    <Label Grid.Column="2"
+                                           Text="&#x203A;"
+                                           FontSize="22"
+                                           TextColor="{StaticResource MutedText}"
+                                           VerticalTextAlignment="Center"
+                                           HorizontalTextAlignment="Center" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <!-- Footer info -->
+                <Label Text="v1.0    100% Offline    Hecho para Scouts"
+                       FontSize="11"
+                       FontFamily="InterRegular"
+                       HorizontalTextAlignment="Center"
+                       TextColor="{StaticResource MutedText}"
+                       Margin="0,6,0,0" />
+
+                <!-- Developer credits -->
+                <VerticalStackLayout Spacing="2" Margin="0,4,0,12">
+                    <Label Text="Developed by Angel Hernandez"
+                           FontSize="11"
+                           FontFamily="InterSemiBold"
+                           HorizontalTextAlignment="Center"
+                           TextColor="{StaticResource MutedText}" />
+                    <Label Text="Grupo 58    Clan La Espina del Dragón"
+                           FontSize="10"
+                           FontFamily="InterRegular"
+                           HorizontalTextAlignment="Center"
+                           TextColor="{StaticResource MutedText}" />
+                    <HorizontalStackLayout HorizontalOptions="Center"
+                                           Spacing="4"
+                                           Margin="0,2,0,0">
+                        <Image Source="instagram_icon.svg"
+                               WidthRequest="16"
+                               HeightRequest="16"
+                               VerticalOptions="Center" />
+                        <Label TextColor="{StaticResource MountainBlue}"
+                               FontSize="11"
+                               FontFamily="InterRegular"
+                               TextDecorations="Underline"
+                               VerticalTextAlignment="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnInstagramTapped" />
+                            </Label.GestureRecognizers>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="@_angelin_angel0n_" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+</ContentPage>

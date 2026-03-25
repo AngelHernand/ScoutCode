@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <RootNamespace>ScoutCode.Tests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="xunit" Version="2.6.6" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.6">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <!-- Enlazamos los archivos fuente del proyecto MAUI directamente (no ProjectReference) -->
+  <ItemGroup>
+    <Compile Include="..\Models\CipherType.cs" Link="Models\CipherType.cs" />
+    <Compile Include="..\Models\OperationMode.cs" Link="Models\OperationMode.cs" />
+    <Compile Include="..\Models\CipherDefinition.cs" Link="Models\CipherDefinition.cs" />
+    <Compile Include="..\Ciphers\ICipherAlgorithm.cs" Link="Ciphers\ICipherAlgorithm.cs" />
+    <Compile Include="..\Ciphers\CipherUtils.cs" Link="Ciphers\CipherUtils.cs" />
+    <Compile Include="..\Ciphers\MorseCipherAlgorithm.cs" Link="Ciphers\MorseCipherAlgorithm.cs" />
+    <Compile Include="..\Ciphers\NumericCipherAlgorithm.cs" Link="Ciphers\NumericCipherAlgorithm.cs" />
+    <Compile Include="..\Ciphers\CellphoneCipherAlgorithm.cs" Link="Ciphers\CellphoneCipherAlgorithm.cs" />
+    <Compile Include="..\Ciphers\CenitPolarCipherAlgorithm.cs" Link="Ciphers\CenitPolarCipherAlgorithm.cs" />
+    <Compile Include="..\Ciphers\BadenPowelCipherAlgorithm.cs" Link="Ciphers\BadenPowelCipherAlgorithm.cs" />
+    <Compile Include="..\Ciphers\MurcielagoCipherAlgorithm.cs" Link="Ciphers\MurcielagoCipherAlgorithm.cs" />
+    <Compile Include="..\Ciphers\ShiftPlusOneCipherAlgorithm.cs" Link="Ciphers\ShiftPlusOneCipherAlgorithm.cs" />
+    <Compile Include="..\Ciphers\ShiftMinusOneCipherAlgorithm.cs" Link="Ciphers\ShiftMinusOneCipherAlgorithm.cs" />
+    <Compile Include="..\Ciphers\ParelinofoCipherAlgorithm.cs" Link="Ciphers\ParelinofoCipherAlgorithm.cs" />
+    <Compile Include="..\Ciphers\DametupicoCipherAlgorithm.cs" Link="Ciphers\DametupicoCipherAlgorithm.cs" />
+    <Compile Include="..\Ciphers\AgujeritoCipherAlgorithm.cs" Link="Ciphers\AgujeritoCipherAlgorithm.cs" />
+    <Compile Include="..\Ciphers\GatoCipherAlgorithm.cs" Link="Ciphers\GatoCipherAlgorithm.cs" />
+    <Compile Include="..\Ciphers\SemaforoCipherAlgorithm.cs" Link="Ciphers\SemaforoCipherAlgorithm.cs" />
+    <Compile Include="..\Ciphers\ElectricaCipherAlgorithm.cs" Link="Ciphers\ElectricaCipherAlgorithm.cs" />
+    <Compile Include="..\Services\ICipherService.cs" Link="Services\ICipherService.cs" />
+    <Compile Include="..\Services\CipherService.cs" Link="Services\CipherService.cs" />
+  </ItemGroup>
+
+</Project>
