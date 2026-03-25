@@ -573,6 +573,10 @@ public partial class CipherDetailViewModel : ObservableObject
             }
             else
             {
+                // Si es Morse, normalizar el texto OCR para corregir puntos/rayas mal leidos
+                if (SelectedCipher == CipherType.Morse)
+                    recognizedText = Ciphers.CipherUtils.NormalizeMorseOcr(recognizedText);
+
                 CameraResultText = recognizedText;
                 HasCameraResult = true;
                 OcrStatusMessage = "Texto reconocido. Podes editarlo antes de descifrar.";

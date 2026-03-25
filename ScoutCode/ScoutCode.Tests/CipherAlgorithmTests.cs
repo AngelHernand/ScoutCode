@@ -52,6 +52,45 @@ public class CipherAlgorithmTests
         Assert.Equal(expected, CipherUtils.GetSpanishIndex(c));
     }
 
+    // ==================== MORSE OCR NORMALIZATION ====================
+
+    [Theory]
+    [InlineData(".-", ".-")]                    // ya correcto
+    [InlineData(",\u2014", ".-")]               // coma→punto, em-dash→raya
+    [InlineData("\u00B7\u2013\u00B7", ".-.")]   // middle dot→punto, en-dash→raya
+    [InlineData("\u2022-\u2022", ".-.")]         // bullet→punto
+    public void NormalizeMorseOcr_FixesDotAndDash(string input, string expected)
+    {
+        Assert.Equal(expected, CipherUtils.NormalizeMorseOcr(input));
+    }
+
+    [Theory]
+    [InlineData("... |  ---", "... / ---")]     // pipe→slash, normaliza espacios
+    [InlineData("...\\---", "... / ---")]       // backslash→slash
+    [InlineData("...  /  ---", "... / ---")]    // espacios extra alrededor de /
+    public void NormalizeMorseOcr_FixesWordSeparators(string input, string expected)
+    {
+        Assert.Equal(expected, CipherUtils.NormalizeMorseOcr(input));
+    }
+
+    [Fact]
+    public void NormalizeMorseOcr_EmptyInput_ReturnsEmpty()
+    {
+        Assert.Equal(string.Empty, CipherUtils.NormalizeMorseOcr(""));
+        Assert.Equal(string.Empty, CipherUtils.NormalizeMorseOcr(null!));
+    }
+
+    [Fact]
+    public void NormalizeMorseOcr_SOS_Roundtrip()
+    {
+        var algo = new MorseCipherAlgorithm();
+        // Simular OCR que lee "," en vez de "." y "—" en vez de "-"
+        var ocrGarbled = ",,,  \u2014\u2014\u2014  ,,,";
+        var normalized = CipherUtils.NormalizeMorseOcr(ocrGarbled);
+        Assert.Equal("... --- ...", normalized);
+        Assert.Equal("SOS", algo.Decrypt(normalized));
+    }
+
     // ==================== MORSE ====================
 
     [Fact]
