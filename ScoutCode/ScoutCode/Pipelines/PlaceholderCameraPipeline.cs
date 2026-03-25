@@ -1,6 +1,8 @@
+using ScoutCode.Models;
+
 namespace ScoutCode.Pipelines;
 
-// Placeholder, por ahora solo devuelve un mensaje
+// Placeholder para plataformas sin soporte de pipeline de símbolos
 public class PlaceholderCameraPipeline : ICameraPipeline
 {
     public Task<string> ProcessImageAsync(byte[] imageBytes)
@@ -9,5 +11,10 @@ public class PlaceholderCameraPipeline : ICameraPipeline
             "Funcionalidad en desarrollo.\n\n" +
             "Cuando este listo va a usar OpenCV para segmentar " +
             "y ONNX para clasificar los simbolos.");
+    }
+
+    public Task<string> ProcessSymbolicImageAsync(byte[] imageBytes, CipherType cipherType)
+    {
+        return Task.FromResult("Error: reconocimiento de símbolos no disponible en esta plataforma.");
     }
 }

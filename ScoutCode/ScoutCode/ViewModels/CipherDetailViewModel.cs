@@ -40,7 +40,10 @@ public partial class CipherDetailViewModel : ObservableObject
             SelectedCipher = (CipherType)value;
             OnPropertyChanged(nameof(SelectedCipher));
             SupportedCharsInfo = _cipherService.GetSupportedCharacters(SelectedCipher);
-            IsOcrSupported = IsOcrCompatibleCipher() && _textRecognitionService.IsAvailable;
+            // Cámara disponible para: texto (vía OCR) o simbólico (vía pipeline)
+            IsOcrSupported = IsOcrCompatibleCipher()
+                ? _textRecognitionService.IsAvailable
+                : true; // Los simbólicos usan el pipeline de template matching
             IsSymbolicCipher = SelectedCipher == CipherType.Gato || SelectedCipher == CipherType.Semaforo || SelectedCipher == CipherType.Electrica;
             if (IsSymbolicCipher)
             {
@@ -555,31 +558,55 @@ public partial class CipherDetailViewModel : ObservableObject
             PreviewImageSource = ImageSource.FromFile(photo.FullPath);
             HasPreviewImage = true;
 
-            // Leer bytes para OCR
+            // Leer bytes de la imagen
             using var stream = await photo.OpenReadAsync();
             using var memoryStream = new MemoryStream();
             await stream.CopyToAsync(memoryStream);
             var imageBytes = memoryStream.ToArray();
 
-            // Ejecutar OCR
-            OcrStatusMessage = "Analizando imagen...";
-            var recognizedText = await _textRecognitionService.RecognizeTextAsync(imageBytes);
-
-            if (string.IsNullOrWhiteSpace(recognizedText))
+            if (IsSymbolicCipher)
             {
-                OcrStatusMessage = "No se detecto texto en la imagen. Intenta con mejor iluminacion.";
-                CameraResultText = string.Empty;
-                HasCameraResult = false;
+                // Cifrados simbólicos: usar pipeline de template matching
+                OcrStatusMessage = "Analizando símbolos...";
+                var symbolicResult = await _cameraPipeline.ProcessSymbolicImageAsync(imageBytes, SelectedCipher);
+
+                if (string.IsNullOrWhiteSpace(symbolicResult) || symbolicResult.StartsWith("Error") || symbolicResult.StartsWith("No se"))
+                {
+                    OcrStatusMessage = symbolicResult ?? "No se detectaron símbolos.";
+                    CameraResultText = string.Empty;
+                    HasCameraResult = false;
+                }
+                else
+                {
+                    // Descifrar automáticamente (el pipeline devuelve "GATO:h,o,l,a")
+                    var decoded = _cipherService.Process(SelectedCipher, OperationMode.Decrypt, symbolicResult);
+                    CameraResultText = decoded;
+                    HasCameraResult = true;
+                    OcrStatusMessage = $"Símbolos reconocidos y descifrados.";
+                }
             }
             else
             {
-                // Si es Morse, normalizar el texto OCR para corregir puntos/rayas mal leidos
-                if (SelectedCipher == CipherType.Morse)
-                    recognizedText = Ciphers.CipherUtils.NormalizeMorseOcr(recognizedText);
+                // Cifrados de texto: usar OCR
+                OcrStatusMessage = "Analizando imagen...";
+                var recognizedText = await _textRecognitionService.RecognizeTextAsync(imageBytes);
 
-                CameraResultText = recognizedText;
-                HasCameraResult = true;
-                OcrStatusMessage = "Texto reconocido. Podes editarlo antes de descifrar.";
+                if (string.IsNullOrWhiteSpace(recognizedText))
+                {
+                    OcrStatusMessage = "No se detecto texto en la imagen. Intenta con mejor iluminacion.";
+                    CameraResultText = string.Empty;
+                    HasCameraResult = false;
+                }
+                else
+                {
+                    // Si es Morse, normalizar el texto OCR para corregir puntos/rayas mal leidos
+                    if (SelectedCipher == CipherType.Morse)
+                        recognizedText = Ciphers.CipherUtils.NormalizeMorseOcr(recognizedText);
+
+                    CameraResultText = recognizedText;
+                    HasCameraResult = true;
+                    OcrStatusMessage = "Texto reconocido. Podes editarlo antes de descifrar.";
+                }
             }
         }
         catch (Exception ex)

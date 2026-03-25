@@ -28,8 +28,8 @@ public static class MauiProgram
 		// Servicios
 		builder.Services.AddSingleton<ICipherService, CipherService>();
 
-		// Pipeline de camara (por ahora placeholder para Pigpen/simbolos)
-		builder.Services.AddSingleton<ICameraPipeline, PlaceholderCameraPipeline>();
+		// Pipeline de camara para reconocimiento de símbolos (Gato, Semáforo, Eléctrica)
+		builder.Services.AddSingleton<ICameraPipeline, SkiaSharpSymbolPipeline>();
 		builder.Services.AddSingleton<IImageSegmenter, PlaceholderImageSegmenter>();
 		builder.Services.AddSingleton<ISymbolClassifier, PlaceholderSymbolClassifier>();
 

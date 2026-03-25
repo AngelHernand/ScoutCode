@@ -70,6 +70,7 @@
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.1" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+		<PackageReference Include="SkiaSharp" Version="2.88.8" />
 	</ItemGroup>
 
 	<!-- ML Kit Text Recognition: solo Android -->
